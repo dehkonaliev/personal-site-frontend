@@ -6,7 +6,9 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import Blog from "./pages/Blog";
 import PostDetail from "./pages/PostDetail";
+import AdminPanel from "./pages/admin/AdminPanel";
 import ScrollToTop from "./components/ScrollToTop";
+import { ADMIN_PATH } from "./lib/adminApi";
 
 export default function App() {
   return (
@@ -19,6 +21,7 @@ export default function App() {
         <Route path="/projects/:slug" element={<ProjectDetail />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<PostDetail />} />
+        <Route path={`${ADMIN_PATH}/*`} element={<AdminPanel />} />
       </Routes>
     </BrowserRouter>
   );
