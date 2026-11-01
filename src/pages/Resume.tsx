@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Layout from "../components/Layout";
 import SeeMoreText from "../components/SeeMoreText";
 import Skeleton from "../components/Skeleton";
@@ -40,22 +40,24 @@ interface TimelineEntry {
 function Timeline({ entries }: { entries: TimelineEntry[] }) {
   if (entries.length === 0) return null;
   return (
-    <div className="relative border-l border-line pl-8 ml-1 space-y-10">
+    <div className="relative ml-1 space-y-9 border-l border-line pl-7">
       {entries.map((entry) => (
         <div key={entry.id} className="relative">
-          <span className="absolute -left-[37px] top-1.5 h-2.5 w-2.5 rounded-full bg-signal" />
-          <p className="text-sm text-slate">{entry.dates}</p>
-          <h3 className="font-medium mt-1">{entry.title}</h3>
+          <span className="absolute -left-[34px] top-1.5 h-3 w-3 rounded-full border-2 border-surface bg-signal ring-4 ring-surface" />
+          <p className="text-xs font-medium uppercase tracking-[0.12em] text-slate">
+            {entry.dates}
+          </p>
+          <h3 className="mt-1.5 font-medium text-ink">{entry.title}</h3>
           {entry.subtitle && (
-            <p className="text-slate text-sm">{entry.subtitle}</p>
+            <p className="text-sm text-slate">{entry.subtitle}</p>
           )}
           {entry.location && (
-            <p className="text-xs text-slate mt-0.5">{entry.location}</p>
+            <p className="mt-0.5 text-xs text-slate">{entry.location}</p>
           )}
           {entry.description && (
             <SeeMoreText
               text={entry.description}
-              className="text-slate text-sm mt-2 leading-relaxed"
+              className="mt-2 text-sm leading-relaxed text-slate"
             />
           )}
           {entry.extra && (
@@ -63,7 +65,7 @@ function Timeline({ entries }: { entries: TimelineEntry[] }) {
               href={entry.extra}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-signal hover:underline mt-2"
+              className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
             >
               Diploma <ExternalLink size={13} />
             </a>
@@ -71,6 +73,14 @@ function Timeline({ entries }: { entries: TimelineEntry[] }) {
         </div>
       ))}
     </div>
+  );
+}
+
+function SectionHeading({ children }: { children: ReactNode }) {
+  return (
+    <h2 className="font-display text-xl font-semibold tracking-tight">
+      {children}
+    </h2>
   );
 }
 
@@ -131,53 +141,58 @@ export default function Resume() {
 
   return (
     <Layout active="Resume">
-      <section className="max-w-content mx-auto px-6 md:px-10 pt-16 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-line">
-        <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6">
-          {/* Portrait — prefers the photo from the resume API, falls back
-              to a monogram while none is set. */}
-          <div className="relative shrink-0">
-            <div className="absolute -inset-2 border border-signal/40" />
-            <div className="relative w-32 h-32 md:w-36 md:h-36 border border-line bg-paper flex items-center justify-center overflow-hidden">
-              {resume?.image ? (
-                <img
-                  src={resume.image}
-                  alt="Maksudbek Dehqonaliyev"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="font-display text-3xl text-slate/50">MD</span>
+      <section className="mx-auto max-w-content px-5 pb-10 pt-16 sm:px-6 md:px-8 md:pt-20 lg:px-10">
+        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+            <div className="relative shrink-0">
+              <div className="absolute -inset-1.5 rounded-[1.75rem] bg-signal/10" />
+              <div className="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-3xl border border-line bg-surface shadow-card md:h-36 md:w-36">
+                {resume?.image ? (
+                  <img
+                    src={resume.image}
+                    alt="Maksudbek Dehqonaliyev"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="font-display text-3xl font-semibold text-signal/60">
+                    MD
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <p className="eyebrow mb-3">Profile</p>
+              <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
+                Resume
+              </h1>
+              {resume && (resume.location || resume.email) && (
+                <p className="mt-2 text-slate">
+                  {[resume.location, resume.email].filter(Boolean).join(" · ")}
+                </p>
               )}
             </div>
           </div>
-          <div>
-            <h1 className="font-display text-4xl mb-2">Resume</h1>
-            {resume && (resume.location || resume.email) && (
-              <p className="text-slate">
-                {[resume.location, resume.email].filter(Boolean).join(" · ")}
-              </p>
-            )}
-          </div>
+          {resume?.resume_file && (
+            <a
+              href={resume.resume_file}
+              className="btn btn-secondary self-start md:self-auto"
+            >
+              <Download size={15} /> Download PDF
+            </a>
+          )}
         </div>
-        {resume?.resume_file && (
-          <a
-            href={resume.resume_file}
-            className="inline-flex items-center gap-1.5 border border-line text-sm px-5 py-3 hover:border-ink transition-colors self-start"
-          >
-            <Download size={15} /> Download PDF
-          </a>
-        )}
       </section>
 
       {loading ? (
-        <div className="max-w-content mx-auto px-6 md:px-10 py-12 space-y-14">
-          <div className="space-y-3">
-            <Skeleton className="h-6 w-36" />
+        <div className="mx-auto max-w-content space-y-6 px-5 pb-20 sm:px-6 md:px-8 lg:px-10">
+          <div className="card space-y-4 p-6 md:p-8">
+            <Skeleton className="h-6 w-32" />
             <Skeleton className="h-4 w-full max-w-2xl" />
             <Skeleton className="h-4 w-full max-w-2xl" />
             <Skeleton className="h-4 w-2/3 max-w-xl" />
           </div>
-          <div className="space-y-8">
-            <Skeleton className="h-6 w-44" />
+          <div className="card space-y-8 p-6 md:p-8">
+            <Skeleton className="h-6 w-40" />
             {[1, 2].map((i) => (
               <div key={i} className="space-y-3">
                 <Skeleton className="h-4 w-40" />
@@ -186,49 +201,59 @@ export default function Resume() {
               </div>
             ))}
           </div>
-          <div className="space-y-3">
-            <Skeleton className="h-6 w-32" />
-            <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
+          <div className="card space-y-6 p-6 md:p-8">
+            <Skeleton className="h-6 w-28" />
+            <div className="grid gap-6 sm:grid-cols-2">
               <Skeleton className="h-5 w-32" />
               <Skeleton className="h-5 w-32" />
             </div>
           </div>
         </div>
       ) : (
-        <>
+        <div className="mx-auto max-w-content space-y-6 px-5 pb-20 sm:px-6 md:px-8 lg:px-10">
           {resume?.summary && (
-            <section className="max-w-content mx-auto px-6 md:px-10 py-12 border-b border-line">
-              <h2 className="font-display text-xl mb-4">Summary</h2>
-              <p className="text-slate leading-relaxed max-w-2xl">
+            <section className="card p-6 md:p-8">
+              <SectionHeading>Summary</SectionHeading>
+              <p className="mt-4 max-w-3xl leading-relaxed text-slate">
                 {resume.summary}
               </p>
             </section>
           )}
 
           {experiences.length > 0 && (
-            <section className="max-w-content mx-auto px-6 md:px-10 py-12 border-b border-line">
-              <h2 className="font-display text-xl mb-6">Experience</h2>
-              <Timeline entries={experienceEntries} />
+            <section className="card p-6 md:p-8">
+              <SectionHeading>Experience</SectionHeading>
+              <div className="mt-6">
+                <Timeline entries={experienceEntries} />
+              </div>
             </section>
           )}
 
           {educations.length > 0 && (
-            <section className="max-w-content mx-auto px-6 md:px-10 py-12 border-b border-line">
-              <h2 className="font-display text-xl mb-6">Education</h2>
-              <Timeline entries={educationEntries} />
+            <section className="card p-6 md:p-8">
+              <SectionHeading>Education</SectionHeading>
+              <div className="mt-6">
+                <Timeline entries={educationEntries} />
+              </div>
             </section>
           )}
 
           {skillGroups.length > 0 && (
-            <section className="max-w-content mx-auto px-6 md:px-10 py-12 border-b border-line">
-              <h2 className="font-display text-xl mb-6">Skills</h2>
-              <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
+            <section className="card p-6 md:p-8">
+              <SectionHeading>Skills</SectionHeading>
+              <div className="mt-6 grid gap-6 sm:grid-cols-2">
                 {skillGroups.map((group) => (
                   <div key={group.name}>
-                    <h3 className="text-sm text-signal mb-2">{group.name}</h3>
-                    <p className="text-slate text-sm leading-relaxed">
-                      {group.skills.map((skill) => skill.name).join(" · ")}
-                    </p>
+                    <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-signal">
+                      {group.name}
+                    </h3>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {group.skills.map((skill) => (
+                        <span key={skill.name} className="tag">
+                          {skill.name}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -236,59 +261,61 @@ export default function Resume() {
           )}
 
           {certificates.length > 0 && (
-            <section className="max-w-content mx-auto px-6 md:px-10 py-12">
-              <h2 className="font-display text-xl mb-6">Certificates</h2>
-              <div className="grid md:grid-cols-2 gap-6">
+            <section className="pt-4">
+              <SectionHeading>Certificates</SectionHeading>
+              <div className="mt-6 grid gap-5 md:grid-cols-2">
                 {certificates.map((cert) => (
-                  <div
+                  <article
                     key={cert.id}
-                    className="border border-line p-6 flex flex-col gap-3"
+                    className="card card-interactive flex h-full flex-col p-6"
                   >
                     <div className="flex items-start gap-5">
                       {cert.photo_overview && (
                         <img
                           src={cert.photo_overview}
                           alt={cert.name}
-                          width={100}
-                          height={100}
-                          className="w-[100px] h-[100px] object-cover border border-line shrink-0"
+                          width={96}
+                          height={96}
+                          className="h-24 w-24 shrink-0 rounded-xl border border-line object-cover"
                         />
                       )}
                       <div className="min-w-0">
-                        <p className="text-sm text-slate">
+                        <p className="text-xs font-medium uppercase tracking-[0.12em] text-slate">
                           {formatDate(cert.created_at)}
                         </p>
-                        <h3 className="font-medium text-lg leading-snug">
+                        <h3 className="mt-1.5 font-display text-lg font-semibold leading-snug">
                           {cert.name}
                         </h3>
                         {cert.issued_by && (
-                          <p className="text-slate text-sm">{cert.issued_by}</p>
+                          <p className="mt-1 text-sm text-slate">
+                            {cert.issued_by}
+                          </p>
                         )}
                       </div>
                     </div>
+
                     <SeeMoreText
                       text={cert.what_learnt}
-                      className="text-slate text-sm leading-relaxed"
+                      className="mt-4 text-sm leading-relaxed text-slate"
                     />
+
                     {cert.technologies.length > 0 && (
-                      <div className="flex flex-wrap gap-2 pt-2">
+                      <div className="mt-4 flex flex-wrap gap-2">
                         {cert.technologies.map((tech) => (
-                          <span
-                            key={tech.id}
-                            className="text-xs border border-line px-2.5 py-1 text-slate"
-                          >
+                          <span key={tech.id} className="tag">
                             {tech.name}
                           </span>
                         ))}
                       </div>
                     )}
-                    <div className="flex flex-wrap items-center gap-5 mt-auto pt-2">
+
+                    <div className="mt-auto flex flex-wrap items-center gap-5 pt-6">
                       {cert.link && (
                         <a
                           href={cert.link}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 text-sm text-signal hover:underline"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
                         >
                           View credential <ExternalLink size={13} />
                         </a>
@@ -299,18 +326,18 @@ export default function Resume() {
                           download
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 text-sm text-signal hover:underline"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
                         >
                           <Download size={14} /> Download
                         </a>
                       )}
                     </div>
-                  </div>
+                  </article>
                 ))}
               </div>
             </section>
           )}
-        </>
+        </div>
       )}
     </Layout>
   );

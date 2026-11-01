@@ -47,23 +47,23 @@ body {
   color-scheme: dark;
 
   --color-ink: #F1F5F9;
-  --color-paper: #0F172A;
-  --color-surface: #1E293B;
-  --color-surface-muted: #172033;
-  --color-slate: #94A3B8;
+  --color-paper: #000000;
+  --color-surface: #080808;
+  --color-surface-muted: #0D0D0D;
+  --color-slate: #A1A1AA;
   --color-signal: #5EEAD4;
-  --color-signal-soft: #134E4A;
+  --color-signal-soft: #102A27;
   --color-gold: #FBBF24;
-  --color-line: #334155;
-  --color-code-bg: #020617;
+  --color-line: #262626;
+  --color-code-bg: #000000;
   --color-code-text: #E2E8F0;
 
   --shadow-card:
-    0 1px 2px rgb(0 0 0 / 0.3),
-    0 12px 32px rgb(0 0 0 / 0.25);
+    0 1px 2px rgb(0 0 0 / 0.4),
+    0 12px 32px rgb(0 0 0 / 0.35);
   --shadow-card-hover:
-    0 2px 6px rgb(0 0 0 / 0.35),
-    0 20px 44px rgb(0 0 0 / 0.35);
+    0 2px 6px rgb(0 0 0 / 0.45),
+    0 20px 44px rgb(0 0 0 / 0.45);
 }
 
 @layer base {

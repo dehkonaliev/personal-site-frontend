@@ -17,12 +17,17 @@ export default function Breadcrumb({ items }: { items: Crumb[] }) {
               {item.to && !last ? (
                 <Link
                   to={item.to}
-                  className="hover:text-ink transition-colors"
+                  className="transition-colors hover:text-signal"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className={last ? "text-ink" : ""}>{item.label}</span>
+                <span
+                  aria-current={last ? "page" : undefined}
+                  className={last ? "font-medium text-ink" : ""}
+                >
+                  {item.label}
+                </span>
               )}
             </li>
           );

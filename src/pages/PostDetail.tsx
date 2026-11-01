@@ -38,7 +38,7 @@ export default function PostDetailPage() {
 
   return (
     <Layout active="Blog">
-      <section className="max-w-content mx-auto px-6 md:px-10 pt-12 pb-20">
+      <section className="mx-auto max-w-content px-5 pb-20 pt-12 sm:px-6 md:px-8 lg:px-10">
         <Breadcrumb
           items={[
             { label: "Home", to: "/" },
@@ -48,44 +48,43 @@ export default function PostDetailPage() {
         />
 
         {error && (
-          <div className="mt-16 text-center">
-            <p className="text-slate mb-4">Post not found.</p>
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-1.5 text-sm text-signal hover:underline"
-            >
+          <div className="card mt-10 p-8 text-center">
+            <p className="text-slate">Post not found.</p>
+            <Link to="/blog" className="btn btn-secondary mt-5">
               <ArrowLeft size={14} /> All posts
             </Link>
           </div>
         )}
 
         {!error && !post && (
-          <article className="mt-10 max-w-3xl">
-            <Skeleton className="h-4 w-32 mb-6" />
-            <Skeleton className="h-10 w-2/3 mb-3" />
-            <Skeleton className="h-4 w-40 mb-10" />
-            <Skeleton className="h-5 w-full max-w-2xl" />
-            <Skeleton className="h-5 w-full max-w-2xl mt-3" />
-            <Skeleton className="h-5 w-full max-w-2xl mt-3" />
-            <Skeleton className="h-5 w-3/4 max-w-xl mt-3" />
+          <article className="card mt-8 max-w-3xl p-6 md:p-10">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="mt-7 h-12 w-full max-w-xl" />
+            <Skeleton className="mt-3 h-12 w-1/2 max-w-sm" />
+            <Skeleton className="mt-8 h-5 w-full max-w-2xl" />
+            <Skeleton className="mt-3 h-5 w-full max-w-2xl" />
+            <Skeleton className="mt-3 h-5 w-3/4 max-w-xl" />
           </article>
         )}
 
         {!error && post && (
-          <article className="mt-10 max-w-3xl">
-            <p className="text-sm text-slate">{formatDate(post.created_at)}</p>
-            <h1 className="font-display text-4xl md:text-5xl leading-[1.1] my-3">
+          <article className="card mt-8 max-w-3xl p-6 md:p-10">
+            <p className="eyebrow mb-4">Article</p>
+            <p className="text-xs font-medium uppercase tracking-[0.12em] text-slate">
+              {formatDate(post.created_at)}
+            </p>
+            <h1 className="mt-3 font-display text-4xl font-semibold leading-[1.08] tracking-tight md:text-5xl">
               {post.title}
             </h1>
             <Link
               to="/blog"
-              className="inline-flex items-center gap-1.5 text-sm text-signal hover:underline mb-10"
+              className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
             >
               <ArrowLeft size={14} /> All posts
             </Link>
             {post.body && (
               <div
-                className="rich-text max-w-2xl"
+                className="rich-text mt-8 max-w-2xl border-t border-line pt-8"
                 dangerouslySetInnerHTML={{ __html: post.body }}
               />
             )}

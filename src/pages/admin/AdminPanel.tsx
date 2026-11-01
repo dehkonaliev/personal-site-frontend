@@ -44,6 +44,7 @@ import ResourcePage from "./ResourcePage";
 import SingletonEditor from "./SingletonEditor";
 import { RESOURCES, findResource } from "./resources";
 import { useDocumentTitle } from "../../lib/useDocumentTitle";
+import ThemeToggle from "../../components/ThemeToggle";
 
 type AuthState = "checking" | "signedOut" | "signedIn" | "disabled";
 
@@ -185,18 +186,18 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen bg-paper text-ink font-sans antialiased lg:flex">
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-ink text-paper transition-transform lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-black text-white transition-transform lg:static lg:translate-x-0 ${
           navOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex h-16 shrink-0 items-center justify-between border-b border-paper/10 px-5">
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5">
           <Link to={ADMIN_PATH} className="font-display text-lg tracking-tight">
             Site admin
           </Link>
           <button
             type="button"
             onClick={() => setNavOpen(false)}
-            className="p-1 text-paper/70 hover:text-paper lg:hidden"
+            className="p-1 text-white/70 hover:text-white lg:hidden"
             aria-label="Close menu"
           >
             <X size={18} />
@@ -214,7 +215,7 @@ export default function AdminPanel() {
                 `flex items-center gap-3 px-3 py-2 text-sm transition-colors ${
                   isActive
                     ? "bg-paper/10 text-gold"
-                    : "text-paper/65 hover:bg-paper/5 hover:text-paper"
+                    : "text-white/65 hover:bg-white/5 hover:text-white"
                 }`
               }
             >
@@ -224,17 +225,21 @@ export default function AdminPanel() {
           ))}
         </nav>
 
-        <div className="shrink-0 space-y-1 border-t border-paper/10 p-3">
+        <div className="shrink-0 space-y-1 border-t border-white/10 p-3">
+          <div className="flex items-center justify-between px-3 py-2 text-sm text-white/65">
+            <span>Appearance</span>
+            <ThemeToggle />
+          </div>
           <Link
             to="/"
-            className="flex items-center gap-3 px-3 py-2 text-sm text-paper/65 hover:bg-paper/5 hover:text-paper"
+            className="flex items-center gap-3 px-3 py-2 text-sm text-white/65 hover:bg-white/5 hover:text-white"
           >
             <ExternalLink size={16} /> View site
           </Link>
           <button
             type="button"
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm text-paper/65 hover:bg-paper/5 hover:text-paper"
+            className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm text-white/65 hover:bg-white/5 hover:text-white"
           >
             <LogOut size={16} /> Sign out
           </button>
