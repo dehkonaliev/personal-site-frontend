@@ -214,7 +214,7 @@ export default function SingletonEditor({ kind }: SingletonEditorProps) {
         </div>
       )}
       {error && (
-        <div className="mt-4 flex items-center gap-2 border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <div className="mt-4 flex items-center gap-2 border border-danger-line bg-danger-surface px-3 py-2 text-sm text-danger">
           <AlertCircle size={15} /> {error}
         </div>
       )}

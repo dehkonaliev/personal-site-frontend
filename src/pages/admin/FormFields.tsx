@@ -222,7 +222,7 @@ function FileControl({ field, preview, onFileUploaded }: FileControlProps) {
           </button>
         </div>
       </div>
-      {error && <p className="mt-2 text-xs text-red-700">{error}</p>}
+      {error && <p className="mt-2 text-xs text-danger">{error}</p>}
     </div>
   );
 }

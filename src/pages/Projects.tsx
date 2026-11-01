@@ -98,8 +98,7 @@ export default function Projects() {
                   key={project.slug + i}
                   className="card card-interactive group flex h-full flex-col p-6 md:p-8"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
+                  <div className="min-w-0">
                       <h2 className="font-display text-xl font-semibold leading-snug tracking-tight">
                         <Link
                           to={`/projects/${project.slug}`}
@@ -111,10 +110,6 @@ export default function Projects() {
                       <p className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-slate">
                         {projectYear(project.created_at)}
                       </p>
-                    </div>
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-muted text-slate transition-colors group-hover:bg-signal group-hover:text-paper">
-                      <ArrowUpRight size={16} />
-                    </span>
                   </div>
 
                   <p className="mt-4 text-sm leading-relaxed text-slate">

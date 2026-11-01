@@ -51,7 +51,7 @@ export default function ProjectDetailPage() {
         />
 
         {error && (
-          <div className="card mt-10 p-8 text-center">
+          <div className="mt-12 max-w-3xl border-t border-line pt-8">
             <p className="text-slate">Project not found.</p>
             <Link to="/projects" className="btn btn-secondary mt-5">
               <ArrowLeft size={14} /> All projects
@@ -60,69 +60,89 @@ export default function ProjectDetailPage() {
         )}
 
         {!error && !project && (
-          <article className="card mt-8 max-w-3xl p-6 md:p-10">
+          <article className="mt-12 max-w-content">
             <Skeleton className="h-4 w-40" />
-            <Skeleton className="mt-8 h-12 w-full max-w-xl" />
-            <Skeleton className="mt-3 h-12 w-2/3 max-w-md" />
-            <Skeleton className="mt-8 h-5 w-full max-w-2xl" />
+            <Skeleton className="mt-8 h-12 w-full max-w-2xl" />
+            <Skeleton className="mt-3 h-12 w-2/3 max-w-xl" />
+            <Skeleton className="mt-8 h-5 w-full max-w-3xl" />
             <Skeleton className="mt-3 h-5 w-full max-w-2xl" />
             <Skeleton className="mt-3 h-5 w-2/3 max-w-xl" />
           </article>
         )}
 
         {!error && project && (
-          <article className="card mt-8 max-w-3xl p-6 md:p-10">
-            <p className="eyebrow mb-4">Project</p>
-            <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight md:text-5xl">
-              {project.title}
-            </h1>
-            <p className="mt-3 text-sm font-medium uppercase tracking-[0.12em] text-slate">
-              {projectYear(project.created_at)}
-            </p>
-            <p className="mt-5 text-lg leading-relaxed text-slate">
-              {project.summary}
-            </p>
+          <article className="mt-12 max-w-content">
+            <header className="max-w-4xl border-b border-line pb-10 md:pb-12">
+              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-signal">
+                Selected project <span className="px-2 text-line">/</span>{" "}
+                {projectYear(project.created_at)}
+              </p>
+              <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight md:text-6xl">
+                {project.title}
+              </h1>
+              <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate md:text-xl">
+                {project.summary}
+              </p>
+            </header>
 
-            {project.technologies.filter(
-              (tech): tech is NonNullable<typeof tech> & { name: string } =>
-                typeof tech === "object" && tech !== null && "name" in tech,
-            ).length > 0 && (
-              <div className="mt-6 flex flex-wrap gap-2">
-                {project.technologies
-                  .filter(
-                    (tech) =>
-                      typeof tech === "object" && tech !== null && "name" in tech,
-                  )
-                  .map((tech) => (
-                    <span key={tech.name} className="tag">
-                      {tech.name}
-                    </span>
-                  ))}
+            <div className="grid gap-10 py-9 md:grid-cols-[minmax(0,1fr)_15rem] md:gap-16 md:py-12">
+              <div>
+                {project.context ? (
+                  <div
+                    className="rich-text max-w-3xl"
+                    dangerouslySetInnerHTML={{ __html: project.context }}
+                  />
+                ) : (
+                  <p className="text-sm text-slate">
+                    More details about this project are coming soon.
+                  </p>
+                )}
               </div>
-            )}
 
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              {project.github_link && (
-                <a
-                  href={project.github_link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-primary"
-                >
-                  <FaGithub size={15} /> View code <ArrowUpRight size={15} />
-                </a>
-              )}
-              <Link to="/projects" className="btn btn-secondary">
-                <ArrowLeft size={14} /> All projects
-              </Link>
+              <aside className="space-y-8 md:border-l md:border-line md:pl-8">
+                {project.technologies.filter(
+                  (tech): tech is NonNullable<typeof tech> & { name: string } =>
+                    typeof tech === "object" && tech !== null && "name" in tech,
+                ).length > 0 && (
+                  <section>
+                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate">
+                      Built with
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies
+                        .filter(
+                          (tech) =>
+                            typeof tech === "object" &&
+                            tech !== null &&
+                            "name" in tech,
+                        )
+                        .map((tech) => (
+                          <span key={tech.name} className="tag">
+                            {tech.name}
+                          </span>
+                        ))}
+                    </div>
+                  </section>
+                )}
+
+                <section className="flex flex-col items-start gap-3">
+                  {project.github_link && (
+                    <a
+                      href={project.github_link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn btn-primary"
+                    >
+                      <FaGithub size={15} /> View code{" "}
+                      <ArrowUpRight size={15} />
+                    </a>
+                  )}
+                  <Link to="/projects" className="btn btn-secondary">
+                    <ArrowLeft size={14} /> All projects
+                  </Link>
+                </section>
+              </aside>
             </div>
-
-            {project.context && (
-              <div
-                className="rich-text mt-10 max-w-2xl border-t border-line pt-8"
-                dangerouslySetInnerHTML={{ __html: project.context }}
-              />
-            )}
           </article>
         )}
       </section>

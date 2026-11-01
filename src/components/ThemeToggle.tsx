@@ -15,7 +15,7 @@ export interface ThemeToggleProps {
 
 export type Theme = "light" | "dark";
 
-const DARK_THEME_COLOR = "#000000";
+const DARK_THEME_COLOR = "#050505";
 const LIGHT_THEME_COLOR = "#F5F7FA";
 
 const storedTheme = (): Theme => {

@@ -30,6 +30,7 @@ const dateRange = (from: string, to: string) =>
 interface TimelineEntry {
   id: number;
   dates: string;
+  isCurrent: boolean;
   title: string;
   subtitle?: string;
   description?: string;
@@ -40,37 +41,59 @@ interface TimelineEntry {
 function Timeline({ entries }: { entries: TimelineEntry[] }) {
   if (entries.length === 0) return null;
   return (
-    <div className="relative ml-1 space-y-9 border-l border-line pl-7">
+    <div className="timeline-track relative ml-1 border-l-2">
       {entries.map((entry) => (
-        <div key={entry.id} className="relative">
-          <span className="absolute -left-[34px] top-1.5 h-3 w-3 rounded-full border-2 border-surface bg-signal ring-4 ring-surface" />
-          <p className="text-xs font-medium uppercase tracking-[0.12em] text-slate">
-            {entry.dates}
-          </p>
-          <h3 className="mt-1.5 font-medium text-ink">{entry.title}</h3>
-          {entry.subtitle && (
-            <p className="text-sm text-slate">{entry.subtitle}</p>
-          )}
-          {entry.location && (
-            <p className="mt-0.5 text-xs text-slate">{entry.location}</p>
-          )}
-          {entry.description && (
-            <SeeMoreText
-              text={entry.description}
-              className="mt-2 text-sm leading-relaxed text-slate"
-            />
-          )}
-          {entry.extra && (
-            <a
-              href={entry.extra}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
-            >
-              Diploma <ExternalLink size={13} />
-            </a>
-          )}
-        </div>
+        <article
+          key={entry.id}
+          className="relative grid gap-2 pb-9 pl-7 last:pb-0 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-8 md:pl-8"
+        >
+          <span
+            aria-label={entry.isCurrent ? "Current" : undefined}
+            className={`timeline-marker absolute -left-[7px] top-1.5 h-3 w-3 rounded-full border-2 border-surface ${
+              entry.isCurrent ? "timeline-marker-current" : ""
+            }`}
+          />
+          <div className="flex flex-wrap items-center gap-2 md:block">
+            <p className="text-xs font-medium uppercase tracking-[0.12em] text-slate">
+              {entry.dates}
+            </p>
+            {entry.isCurrent && (
+              <span className="timeline-current-label inline-flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em]">
+                <span className="timeline-current-dot h-1.5 w-1.5 rounded-full" />
+                Current
+              </span>
+            )}
+          </div>
+          <div className="min-w-0">
+            <h3 className="font-display text-lg font-semibold leading-snug text-ink">
+              {entry.title}
+            </h3>
+            {entry.subtitle && (
+              <p className="mt-0.5 text-sm font-medium text-slate">
+                {entry.subtitle}
+              </p>
+            )}
+            {entry.location && (
+              <p className="mt-1 text-xs text-slate">{entry.location}</p>
+            )}
+            {entry.description && (
+              <SeeMoreText
+                text={entry.description}
+                className="mt-3 text-sm leading-relaxed text-slate"
+              />
+            )}
+            {entry.extra && (
+              <a
+                href={entry.extra}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
+              >
+                Diploma <ExternalLink size={13} />
+              </a>
+            )}
+          </div>
+        </article>
       ))}
     </div>
   );
@@ -124,6 +147,7 @@ export default function Resume() {
   const experienceEntries: TimelineEntry[] = experiences.map((exp) => ({
     id: exp.id,
     dates: dateRange(exp.from_date, exp.to_date),
+    isCurrent: isPresent(exp.to_date),
     title: exp.job,
     subtitle: exp.company,
     location: exp.location ?? undefined,
@@ -133,6 +157,7 @@ export default function Resume() {
   const educationEntries: TimelineEntry[] = educations.map((edu) => ({
     id: edu.id,
     dates: dateRange(edu.from_date, edu.to_date),
+    isCurrent: isPresent(edu.to_date),
     title: edu.field,
     subtitle: edu.edu_place,
     description: edu.what_learnt,

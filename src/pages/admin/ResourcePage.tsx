@@ -170,7 +170,7 @@ export default function ResourcePage({ resource }: { resource: ResourceDef }) {
         </div>
       )}
       {error && (
-        <div className="mt-4 flex items-center gap-2 border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <div className="mt-4 flex items-center gap-2 border border-danger-line bg-danger-surface px-3 py-2 text-sm text-danger">
           <AlertCircle size={15} /> {error}
         </div>
       )}
@@ -238,7 +238,7 @@ export default function ResourcePage({ resource }: { resource: ResourceDef }) {
                         type="button"
                         onClick={() => void handleDelete(row)}
                         aria-label="Delete"
-                        className="border border-line p-1.5 text-slate hover:border-red-400 hover:text-red-600"
+                        className="border border-line p-1.5 text-slate hover:border-danger hover:text-danger"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -397,7 +397,7 @@ function ResourceForm({
         </div>
 
         {formError && (
-          <div className="mb-4 flex items-start gap-2 border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
+          <div className="mb-4 flex items-start gap-2 border border-danger-line bg-danger-surface px-3 py-2 text-sm text-danger">
             <AlertCircle size={15} className="mt-0.5 shrink-0" />
             <span>{formError}</span>
           </div>
