@@ -367,6 +367,7 @@ body {
     opacity: 0.45;
     transform: none;
   }
+
 }
 
 ::view-transition-image-pair(root) {
@@ -398,14 +399,60 @@ body {
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  visibility: hidden;
-  opacity: 0;
+  visibility: visible;
+  opacity: 1;
   pointer-events: none;
 }
 
-:root[data-theme="dark"] .starfield {
+.light-sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.home-code-animation {
+  width: 100%;
+  max-width: 22rem;
+  aspect-ratio: 7121 / 6610;
+  justify-self: end;
+  background-image: url("/bg/code-typing.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+:root[data-theme="dark"] .home-code-animation {
+  background-image: url("/bg/code-typing-dark.svg");
+}
+
+.mist-canvas {
+  position: absolute;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
+  pointer-events: none;
+  filter: blur(9px);
+}
+
+.mist-canvas-background {
+  z-index: 2;
+}
+
+.mist-canvas-foreground {
+  z-index: 3;
+  filter: blur(12px);
+}
+
+:root[data-theme="dark"] .light-sky {
+  visibility: hidden;
+}
+
+:root[data-theme="dark"] .starfield-star {
   visibility: visible;
-  opacity: 1;
+}
+
+.starfield-star {
+  visibility: hidden;
 }
 
 .starfield-star {

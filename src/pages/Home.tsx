@@ -28,44 +28,50 @@ export default function Home() {
           <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-signal/5 blur-3xl" />
         </div>
 
-        <div className="relative mx-auto max-w-content px-5 pb-20 pt-20 sm:px-6 md:px-8 md:pb-28 md:pt-28 lg:px-10">
-          {loading ? (
-            <div className="max-w-3xl">
-              <Skeleton className="mb-6 h-7 w-48 rounded-full" />
-              <Skeleton className="mb-3 h-14 w-full max-w-2xl" />
-              <Skeleton className="mb-6 h-14 w-3/4 max-w-xl" />
-              <Skeleton className="h-5 w-full max-w-xl" />
-              <Skeleton className="mt-2 h-5 w-2/3 max-w-lg" />
-              <div className="mt-9 flex gap-3">
-                <Skeleton className="h-11 w-40 rounded-full" />
-                <Skeleton className="h-11 w-36 rounded-full" />
+        <div className="relative mx-auto grid max-w-content items-center gap-8 px-5 pb-20 pt-20 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(14rem,0.55fr)] md:px-8 md:pb-28 md:pt-28 lg:px-10">
+          <div className="relative z-10">
+            {loading ? (
+              <div className="max-w-3xl">
+                <Skeleton className="mb-6 h-7 w-48 rounded-full" />
+                <Skeleton className="mb-3 h-14 w-full max-w-2xl" />
+                <Skeleton className="mb-6 h-14 w-3/4 max-w-xl" />
+                <Skeleton className="h-5 w-full max-w-xl" />
+                <Skeleton className="mt-2 h-5 w-2/3 max-w-lg" />
+                <div className="mt-9 flex gap-3">
+                  <Skeleton className="h-11 w-40 rounded-full" />
+                  <Skeleton className="h-11 w-36 rounded-full" />
+                </div>
               </div>
-            </div>
-          ) : (
-            <>
-              {home?.job_title && (
-                <span className="eyebrow mb-6">{home.job_title}</span>
-              )}
-              {home?.heading_activity && (
-                <h1 className="max-w-3xl font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
-                  {home.heading_activity}
-                </h1>
-              )}
-              {home?.home_context && (
-                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate md:text-xl">
-                  {home.home_context}
-                </p>
-              )}
-              <div className="mt-9 flex flex-wrap gap-3">
-                <Link to="/projects" className="btn btn-primary">
-                  See my projects <ArrowUpRight size={16} />
-                </Link>
-                <Link to="/resume" className="btn btn-secondary">
-                  Read my resume
-                </Link>
-              </div>
-            </>
-          )}
+            ) : (
+              <>
+                {home?.job_title && (
+                  <span className="eyebrow mb-6">{home.job_title}</span>
+                )}
+                {home?.heading_activity && (
+                  <h1 className="max-w-3xl font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
+                    {home.heading_activity}
+                  </h1>
+                )}
+                {home?.home_context && (
+                  <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate md:text-xl">
+                    {home.home_context}
+                  </p>
+                )}
+                <div className="mt-9 flex flex-wrap gap-3">
+                  <Link to="/projects" className="btn btn-primary">
+                    See my projects <ArrowUpRight size={16} />
+                  </Link>
+                  <Link to="/resume" className="btn btn-secondary">
+                    Read my resume
+                  </Link>
+                </div>
+              </>
+            )}
+          </div>
+          <div
+            aria-hidden="true"
+            className="home-code-animation hidden md:block"
+          />
         </div>
       </section>
 

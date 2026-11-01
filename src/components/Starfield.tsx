@@ -1,3 +1,6 @@
+import { useEffect, useRef } from "react";
+import { animateMountainMist } from "../lib/mountainMist";
+
 const STAR_POSITIONS = [
   [88, 30],
   [78, 40],
@@ -14,7 +17,24 @@ const STAR_POSITIONS = [
   [96, 86],
 ] as const;
 
-export default function Starfield() {
+interface StarfieldProps {
+  home: boolean;
+}
+
+export default function Starfield({ home }: StarfieldProps) {
+  const skyRef = useRef<HTMLDivElement>(null);
+  const backgroundMistRef = useRef<HTMLCanvasElement>(null);
+  const foregroundMistRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const sky = skyRef.current;
+    const backgroundMist = backgroundMistRef.current;
+    const foregroundMist = foregroundMistRef.current;
+    if (!home || !sky || !backgroundMist || !foregroundMist) return;
+
+    return animateMountainMist(sky, [backgroundMist, foregroundMist]);
+  }, [home]);
+
   const stars = STAR_POSITIONS.map(([x, y], index) => {
     const size = [2, 5, 8, 10].includes(index) ? 5 : 2;
 
@@ -38,6 +58,20 @@ export default function Starfield() {
 
   return (
     <div className="starfield" aria-hidden="true">
+      <div className="light-sky" ref={skyRef}>
+        {home && (
+          <>
+            <canvas
+              ref={backgroundMistRef}
+              className="mist-canvas mist-canvas-background"
+            />
+            <canvas
+              ref={foregroundMistRef}
+              className="mist-canvas mist-canvas-foreground"
+            />
+          </>
+        )}
+      </div>
       {stars}
     </div>
   );

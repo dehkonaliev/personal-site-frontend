@@ -29,8 +29,12 @@ export default function Layout({ children, active = "Home" }: LayoutProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="starry-shell min-h-screen bg-paper text-ink font-sans antialiased">
-      <Starfield />
+    <div
+      className={`starry-shell min-h-screen bg-paper text-ink font-sans antialiased ${
+        active === "Home" ? "starry-shell-home" : ""
+      }`}
+    >
+      <Starfield home={active === "Home"} />
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-line/80 bg-paper/80 backdrop-blur-xl">
           <div className="mx-auto flex h-16 max-w-content items-center justify-between gap-4 px-5 sm:px-6 md:px-8 lg:px-10">
