@@ -45,7 +45,6 @@ import SingletonEditor from "./SingletonEditor";
 import { RESOURCES, findResource } from "./resources";
 import { useDocumentTitle } from "../../lib/useDocumentTitle";
 import ThemeToggle from "../../components/ThemeToggle";
-import Starfield from "../../components/Starfield";
 
 type AuthState = "checking" | "signedOut" | "signedIn" | "disabled";
 
@@ -169,11 +168,8 @@ export default function AdminPanel() {
 
   if (auth === "checking") {
     return (
-      <div className="starry-shell min-h-screen bg-paper">
-        <Starfield />
-        <div className="relative z-10 flex min-h-screen items-center justify-center text-slate">
-          <Loader2 size={22} className="animate-spin" />
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-paper text-slate">
+        <Loader2 size={22} className="animate-spin" />
       </div>
     );
   }
@@ -188,10 +184,8 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="starry-shell min-h-screen bg-paper">
-      <Starfield />
-      <div className="relative z-10 min-h-screen text-ink font-sans antialiased lg:flex">
-        <aside
+    <div className="min-h-screen bg-paper text-ink font-sans antialiased lg:flex">
+      <aside
         className={`admin-sidebar fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-black text-white transition-transform lg:static lg:translate-x-0 ${
           navOpen ? "translate-x-0" : "-translate-x-full"
         }`}
@@ -250,16 +244,16 @@ export default function AdminPanel() {
             <LogOut size={16} /> Sign out
           </button>
         </div>
-        </aside>
+      </aside>
 
-        {navOpen && (
+      {navOpen && (
         <div
           className="fixed inset-0 z-40 bg-ink/50 lg:hidden"
           onClick={() => setNavOpen(false)}
         />
       )}
 
-        <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1">
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-line bg-paper/95 px-4 backdrop-blur lg:hidden">
           <button
             type="button"
@@ -294,7 +288,6 @@ export default function AdminPanel() {
             ))}
             <Route path="*" element={<Navigate to={ADMIN_PATH} replace />} />
           </Routes>
-          </div>
         </div>
       </div>
     </div>
@@ -322,10 +315,8 @@ function LoginScreen({ onLogin, disabledReason }: LoginScreenProps) {
   }
 
   return (
-    <div className="starry-shell min-h-screen bg-paper">
-      <Starfield />
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 text-ink font-sans antialiased">
-        <div className="w-full max-w-sm border border-line bg-paper p-8">
+    <div className="flex min-h-screen items-center justify-center bg-paper px-4 text-ink font-sans antialiased">
+      <div className="w-full max-w-sm border border-line bg-paper p-8">
         <div className="mb-4 inline-flex items-center gap-2 text-signal">
           <LockKeyhole size={18} />
           <span className="text-xs font-medium uppercase tracking-wide">
@@ -378,7 +369,6 @@ function LoginScreen({ onLogin, disabledReason }: LoginScreenProps) {
           Tip: you can open the secret link with{" "}
           <code className="text-xs">#token=…</code> to sign in automatically.
         </p>
-        </div>
       </div>
     </div>
   );

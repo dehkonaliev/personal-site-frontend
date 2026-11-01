@@ -82,44 +82,6 @@ body {
   background-color: #050505;
 }
 
-.starry-shell {
-  position: relative;
-  isolation: isolate;
-}
-
-.starfield {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-
-:root[data-theme="dark"] .starfield {
-  visibility: visible;
-  opacity: 1;
-}
-
-.starfield-star {
-  position: absolute;
-  border-radius: 50%;
-  background-color: #F4F4F5;
-  box-shadow: 0 0 5px rgb(244 244 245 / 0.55);
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-
-.starfield-star-fade {
-  animation-name: star-fade;
-}
-
-.starfield-star-pulse {
-  animation-name: star-pulse;
-  opacity: 0.55;
-}
-
 @layer base {
   body {
     color: var(--color-ink);
@@ -370,30 +332,6 @@ body {
   }
 }
 
-@keyframes star-fade {
-  0%,
-  100% {
-    opacity: 0;
-  }
-
-  50% {
-    opacity: 0.85;
-  }
-}
-
-@keyframes star-pulse {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: scale(0.7);
-  }
-
-  50% {
-    opacity: 0.8;
-    transform: scale(1.25);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -448,6 +386,68 @@ body {
 
 ::view-transition-new(root) {
   z-index: 2;
+}
+
+.starry-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .starfield {
+  visibility: visible;
+  opacity: 1;
+}
+
+.starfield-star {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #F4F4F5;
+  box-shadow: 0 0 5px rgb(244 244 245 / 0.55);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.starfield-star-fade {
+  animation-name: star-fade;
+}
+
+.starfield-star-pulse {
+  animation-name: star-pulse;
+  opacity: 0.55;
+}
+
+@keyframes star-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes star-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.25);
+  }
 }
 
 .rich-text {
