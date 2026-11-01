@@ -15,10 +15,7 @@ export default function Breadcrumb({ items }: { items: Crumb[] }) {
             <li key={item.label} className="flex items-center gap-1.5">
               {i > 0 && <span className="text-line">/</span>}
               {item.to && !last ? (
-                <Link
-                  to={item.to}
-                  className="transition-colors hover:text-signal"
-                >
+                <Link to={item.to}>
                   {item.label}
                 </Link>
               ) : (

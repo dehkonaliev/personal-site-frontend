@@ -212,10 +212,10 @@ export default function AdminPanel() {
               end={item.to === ""}
               onClick={() => setNavOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 text-sm transition-colors ${
+                `flex items-center gap-3 px-3 py-2 text-sm ${
                   isActive
-                    ? "bg-paper/10 text-gold"
-                    : "text-white/65 hover:bg-white/5 hover:text-white"
+                    ? "text-gold"
+                    : "text-white/65"
                 }`
               }
             >
@@ -232,14 +232,14 @@ export default function AdminPanel() {
           </div>
           <Link
             to="/"
-            className="flex items-center gap-3 px-3 py-2 text-sm text-white/65 hover:bg-white/5 hover:text-white"
+            className="flex items-center gap-3 px-3 py-2 text-sm text-white/65"
           >
             <ExternalLink size={16} /> View site
           </Link>
           <button
             type="button"
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm text-white/65 hover:bg-white/5 hover:text-white"
+            className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm text-white/65"
           >
             <LogOut size={16} /> Sign out
           </button>

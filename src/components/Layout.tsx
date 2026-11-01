@@ -48,10 +48,10 @@ export default function Layout({ children, active = "Home" }: LayoutProps) {
                     key={item.label}
                     to={item.href}
                     aria-current={isActive ? "page" : undefined}
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    className={`px-4 py-2 text-sm font-medium ${
                       isActive
-                        ? "bg-signal/10 text-signal"
-                        : "text-slate hover:bg-surface hover:text-ink"
+                        ? "text-signal"
+                        : "text-slate"
                     }`}
                   >
                     {item.label}
@@ -73,7 +73,7 @@ export default function Layout({ children, active = "Home" }: LayoutProps) {
         </div>
 
         {open && (
-          <div id="mobile-nav" className="border-t border-line bg-surface md:hidden">
+          <div id="mobile-nav" className="border-t border-line md:hidden">
             <nav
               aria-label="Mobile"
               className="mx-auto flex max-w-content flex-col gap-1 px-5 py-4 sm:px-6"
@@ -86,10 +86,10 @@ export default function Layout({ children, active = "Home" }: LayoutProps) {
                     to={item.href}
                     onClick={() => setOpen(false)}
                     aria-current={isActive ? "page" : undefined}
-                    className={`flex min-h-11 items-center rounded-xl px-4 text-base font-medium transition-colors ${
+                    className={`flex min-h-11 items-center px-4 text-base font-medium ${
                       isActive
-                        ? "bg-signal/10 text-signal"
-                        : "text-slate hover:bg-surface-muted hover:text-ink"
+                        ? "text-signal"
+                        : "text-slate"
                     }`}
                   >
                     {item.label}
