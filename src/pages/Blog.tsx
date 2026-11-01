@@ -4,11 +4,14 @@ import Layout from "../components/Layout";
 import Skeleton from "../components/Skeleton";
 import { ArrowUpRight } from "lucide-react";
 import { api, formatDate, type Post } from "../lib/api";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function Blog() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useDocumentTitle("Blog");
 
   useEffect(() => {
     api
@@ -23,61 +26,77 @@ export default function Blog() {
 
   return (
     <Layout active="Blog">
-      <section className="max-w-content mx-auto px-6 md:px-10 pt-16 pb-10 border-b border-line">
-        <h1 className="font-display text-4xl mb-3">Blog</h1>
-        <p className="text-slate max-w-xl">
+      <section className="mx-auto max-w-content px-5 pb-10 pt-16 sm:px-6 md:px-8 md:pt-20 lg:px-10">
+        <p className="eyebrow mb-4">Writing</p>
+        <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          Blog
+        </h1>
+        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate">
           Notes on backend engineering, the move into machine learning, and
           whatever else is worth writing down along the way.
         </p>
       </section>
 
-      <section className="max-w-content mx-auto px-6 md:px-10">
+      <section className="mx-auto max-w-content px-5 pb-20 sm:px-6 md:px-8 lg:px-10">
         {loading && (
-          <div className="py-10">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="py-10 border-b border-line">
-                <div className="flex items-start justify-between gap-6">
-                  <div className="max-w-2xl space-y-3">
-                    <Skeleton className="h-4 w-32" />
-                    <Skeleton className="h-7 w-72" />
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-3/4" />
-                  </div>
-                  <Skeleton className="h-5 w-5 mt-1 shrink-0" />
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="card flex flex-col p-6 md:p-7">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-4 w-28" />
+                  <Skeleton className="h-9 w-9 rounded-full" />
                 </div>
+                <Skeleton className="mt-5 h-7 w-4/5" />
+                <Skeleton className="mt-3 h-4 w-full" />
+                <Skeleton className="mt-2 h-4 w-full" />
+                <Skeleton className="mt-2 h-4 w-2/3" />
+                <Skeleton className="mt-6 h-4 w-24" />
               </div>
             ))}
           </div>
         )}
+
         {!loading && error && (
-          <p className="py-10 text-slate">Could not load posts.</p>
+          <div className="card p-8 text-center text-slate">
+            Could not load posts.
+          </div>
         )}
+
         {!loading && !error && posts.length === 0 && (
-          <p className="py-10 text-slate">No posts yet — check back soon.</p>
+          <div className="card p-8 text-center text-slate">
+            No posts yet — check back soon.
+          </div>
         )}
-        {!loading && posts.map((post, i) => (
-          <Link
-            key={post.slug + i}
-            to={`/blog/${post.slug}`}
-            className="group block py-10 border-b border-line"
-          >
-            <div className="flex items-start justify-between gap-6">
-              <div className="max-w-2xl">
-                <p className="text-sm text-slate mb-2">
-                  {formatDate(post.created_at)}
-                </p>
-                <h2 className="font-display text-2xl mb-3 group-hover:text-signal transition-colors">
+
+        {!loading && !error && posts.length > 0 && (
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post, i) => (
+              <Link
+                key={post.slug + i}
+                to={`/blog/${post.slug}`}
+                className="card card-interactive group flex h-full flex-col p-6 md:p-7"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-xs font-medium uppercase tracking-[0.12em] text-slate">
+                    {formatDate(post.created_at)}
+                  </p>
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-muted text-slate transition-colors group-hover:bg-signal group-hover:text-paper">
+                    <ArrowUpRight size={16} />
+                  </span>
+                </div>
+                <h2 className="mt-5 font-display text-xl font-semibold leading-snug tracking-tight transition-colors group-hover:text-signal">
                   {post.title}
                 </h2>
-                <p className="text-slate leading-relaxed">{post.summary}</p>
-              </div>
-              <ArrowUpRight
-                size={20}
-                className="mt-1 shrink-0 text-slate group-hover:text-signal transition-colors"
-              />
-            </div>
-          </Link>
-        ))}
+                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate">
+                  {post.summary}
+                </p>
+                <span className="mt-auto pt-6 text-sm font-medium text-signal">
+                  Read article
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
     </Layout>
   );

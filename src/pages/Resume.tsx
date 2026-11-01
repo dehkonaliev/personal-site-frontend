@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import SeeMoreText from "../components/SeeMoreText";
 import Skeleton from "../components/Skeleton";
 import { Download, ExternalLink } from "lucide-react";
 import {
@@ -11,6 +12,7 @@ import {
   type Resume as ResumeData,
   type SkillGroup,
 } from "../lib/api";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 const shortDate = (iso: string) =>
   new Date(iso).toLocaleDateString("en-GB", {
@@ -51,9 +53,10 @@ function Timeline({ entries }: { entries: TimelineEntry[] }) {
             <p className="text-xs text-slate mt-0.5">{entry.location}</p>
           )}
           {entry.description && (
-            <p className="text-slate text-sm mt-2 leading-relaxed">
-              {entry.description}
-            </p>
+            <SeeMoreText
+              text={entry.description}
+              className="text-slate text-sm mt-2 leading-relaxed"
+            />
           )}
           {entry.extra && (
             <a
@@ -78,6 +81,8 @@ export default function Resume() {
   const [skillGroups, setSkillGroups] = useState<SkillGroup[]>([]);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useDocumentTitle("Resume");
 
   useEffect(() => {
     let active = true;
@@ -261,9 +266,10 @@ export default function Resume() {
                         )}
                       </div>
                     </div>
-                    <p className="text-slate text-sm leading-relaxed">
-                      {cert.what_learnt}
-                    </p>
+                    <SeeMoreText
+                      text={cert.what_learnt}
+                      className="text-slate text-sm leading-relaxed"
+                    />
                     {cert.technologies.length > 0 && (
                       <div className="flex flex-wrap gap-2 pt-2">
                         {cert.technologies.map((tech) => (

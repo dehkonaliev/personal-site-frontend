@@ -6,6 +6,7 @@ import Skeleton from "../components/Skeleton";
 import { ArrowLeft } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import { api, type ProjectDetail } from "../lib/api";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 const projectYear = (iso: string) => new Date(iso).getFullYear();
 
@@ -13,6 +14,8 @@ export default function ProjectDetailPage() {
   const { slug = "" } = useParams();
   const [project, setProject] = useState<ProjectDetail | null>(null);
   const [error, setError] = useState(false);
+
+  useDocumentTitle(project?.title ?? "Projects");
 
   useEffect(() => {
     let active = true;

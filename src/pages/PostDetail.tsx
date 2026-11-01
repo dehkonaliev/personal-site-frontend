@@ -5,11 +5,14 @@ import Breadcrumb from "../components/Breadcrumb";
 import Skeleton from "../components/Skeleton";
 import { ArrowLeft } from "lucide-react";
 import { api, formatDate, type PostDetail } from "../lib/api";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function PostDetailPage() {
   const { slug = "" } = useParams();
   const [post, setPost] = useState<PostDetail | null>(null);
   const [error, setError] = useState(false);
+
+  useDocumentTitle(post?.title ?? "Blog");
 
   useEffect(() => {
     let active = true;

@@ -5,6 +5,7 @@ import {
   NavLink,
   Route,
   Routes,
+  useLocation,
 } from "react-router-dom";
 import {
   Activity,
@@ -41,7 +42,8 @@ import {
 import Overview from "./Overview";
 import ResourcePage from "./ResourcePage";
 import SingletonEditor from "./SingletonEditor";
-import { RESOURCES } from "./resources";
+import { RESOURCES, findResource } from "./resources";
+import { useDocumentTitle } from "../../lib/useDocumentTitle";
 
 type AuthState = "checking" | "signedOut" | "signedIn" | "disabled";
 
@@ -84,6 +86,23 @@ export default function AdminPanel() {
   });
   const [disabledReason, setDisabledReason] = useState("");
   const [navOpen, setNavOpen] = useState(false);
+  const location = useLocation();
+
+  const section = location.pathname
+    .replace(/\/+$/, "")
+    .slice(ADMIN_PATH.length)
+    .replace(/^\/+/, "");
+  const sectionLabel =
+    section === ""
+      ? "Dashboard"
+      : section === "home"
+        ? "Home page"
+        : section === "resume"
+          ? "Resume"
+          : (findResource(section)?.label ?? "Dashboard");
+  useDocumentTitle(
+    auth === "signedIn" ? `Admin · ${sectionLabel}` : "Admin sign in",
+  );
 
   useEffect(() => {
     if (!getAdminToken()) return;
