@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const MOBILE_QUERY = "(max-width: 767px)";
 
@@ -11,6 +12,7 @@ const isPhone = () =>
   typeof window !== "undefined" && window.matchMedia(MOBILE_QUERY).matches;
 
 export default function SeeMoreText({ text, className = "" }: SeeMoreTextProps) {
+  const { t } = useTranslation();
   const textRef = useRef<HTMLParagraphElement>(null);
   const [isMobile, setIsMobile] = useState(isPhone);
   const [expanded, setExpanded] = useState(false);
@@ -92,7 +94,7 @@ export default function SeeMoreText({ text, className = "" }: SeeMoreTextProps) 
           aria-expanded={expanded}
           className="mt-1 inline-flex items-center text-sm font-medium text-signal transition-opacity duration-300 hover:underline"
         >
-          {expanded ? "See less" : "See more"}
+          {expanded ? t("common.seeLess") : t("common.seeMore")}
         </button>
       )}
     </div>

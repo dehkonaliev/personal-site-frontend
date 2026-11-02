@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 interface Crumb {
@@ -6,8 +7,9 @@ interface Crumb {
 }
 
 export default function Breadcrumb({ items }: { items: Crumb[] }) {
+  const { t } = useTranslation();
   return (
-    <nav aria-label="Breadcrumb" className="text-sm text-slate">
+    <nav aria-label={t("common.breadcrumb")} className="text-sm text-slate">
       <ol className="flex flex-wrap items-center gap-1.5">
         {items.map((item, i) => {
           const last = i === items.length - 1;

@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import Layout from "../components/Layout";
 import SeeMoreText from "../components/SeeMoreText";
 import Skeleton from "../components/Skeleton";
@@ -13,9 +14,10 @@ import {
   type SkillGroup,
 } from "../lib/api";
 import { useDocumentTitle } from "../lib/useDocumentTitle";
+import { intlLocale } from "../i18n";
 
-const shortDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", {
+const shortDate = (iso: string, locale: string) =>
+  new Date(iso).toLocaleDateString(locale, {
     year: "numeric",
     month: "short",
     timeZone: "UTC",
@@ -24,8 +26,8 @@ const shortDate = (iso: string) =>
 const isPresent = (iso: string) =>
   new Date(iso).getTime() > Date.now() + 1000 * 60 * 60 * 24;
 
-const dateRange = (from: string, to: string) =>
-  `${shortDate(from)} — ${isPresent(to) ? "Present" : shortDate(to)}`;
+const dateRange = (from: string, to: string, present: string, locale: string) =>
+  `${shortDate(from, locale)} — ${isPresent(to) ? present : shortDate(to, locale)}`;
 
 interface TimelineEntry {
   id: number;
@@ -38,7 +40,15 @@ interface TimelineEntry {
   extra?: string | null;
 }
 
-function Timeline({ entries }: { entries: TimelineEntry[] }) {
+function Timeline({
+  entries,
+  current,
+  diploma,
+}: {
+  entries: TimelineEntry[];
+  current: string;
+  diploma: string;
+}) {
   if (entries.length === 0) return null;
   return (
     <div className="timeline-track relative ml-1 border-l-2">
@@ -48,7 +58,7 @@ function Timeline({ entries }: { entries: TimelineEntry[] }) {
           className="relative grid gap-2 pb-9 pl-7 last:pb-0 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-8 md:pl-8"
         >
           <span
-            aria-label={entry.isCurrent ? "Current" : undefined}
+            aria-label={entry.isCurrent ? current : undefined}
             className={`timeline-marker absolute -left-[7px] top-1.5 h-3 w-3 rounded-full border-2 border-surface ${
               entry.isCurrent ? "timeline-marker-current" : ""
             }`}
@@ -60,7 +70,7 @@ function Timeline({ entries }: { entries: TimelineEntry[] }) {
             {entry.isCurrent && (
               <span className="timeline-current-label inline-flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em]">
                 <span className="timeline-current-dot h-1.5 w-1.5 rounded-full" />
-                Current
+                {current}
               </span>
             )}
           </div>
@@ -89,7 +99,7 @@ function Timeline({ entries }: { entries: TimelineEntry[] }) {
                 rel="noreferrer"
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
               >
-                Diploma <ExternalLink size={13} />
+                {diploma} <ExternalLink size={13} />
               </a>
             )}
           </div>
@@ -108,6 +118,7 @@ function SectionHeading({ children }: { children: ReactNode }) {
 }
 
 export default function Resume() {
+  const { t, i18n } = useTranslation();
   const [resume, setResume] = useState<ResumeData | null>(null);
   const [educations, setEducations] = useState<Education[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -115,10 +126,11 @@ export default function Resume() {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useDocumentTitle("Resume");
+  useDocumentTitle(t("resume.title"));
 
   useEffect(() => {
     let active = true;
+    setLoading(true);
     Promise.all([
       api.resume().catch(() => null),
       api.educations().catch(() => [] as Education[]),
@@ -142,11 +154,12 @@ export default function Resume() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [i18n.resolvedLanguage]);
 
+  const locale = intlLocale();
   const experienceEntries: TimelineEntry[] = experiences.map((exp) => ({
     id: exp.id,
-    dates: dateRange(exp.from_date, exp.to_date),
+    dates: dateRange(exp.from_date, exp.to_date, t("common.present"), locale),
     isCurrent: isPresent(exp.to_date),
     title: exp.job,
     subtitle: exp.company,
@@ -156,7 +169,7 @@ export default function Resume() {
 
   const educationEntries: TimelineEntry[] = educations.map((edu) => ({
     id: edu.id,
-    dates: dateRange(edu.from_date, edu.to_date),
+    dates: dateRange(edu.from_date, edu.to_date, t("common.present"), locale),
     isCurrent: isPresent(edu.to_date),
     title: edu.field,
     subtitle: edu.edu_place,
@@ -165,7 +178,7 @@ export default function Resume() {
   }));
 
   return (
-    <Layout active="Resume">
+    <Layout active="resume">
       <section className="mx-auto max-w-content px-5 pb-10 pt-16 sm:px-6 md:px-8 md:pt-20 lg:px-10">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
@@ -186,9 +199,9 @@ export default function Resume() {
               </div>
             </div>
             <div>
-              <p className="eyebrow mb-3">Profile</p>
+              <p className="eyebrow mb-3">{t("resume.profile")}</p>
               <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
-                Resume
+                {t("resume.title")}
               </h1>
               {resume && (resume.location || resume.email) && (
                 <p className="mt-2 text-slate">
@@ -202,7 +215,7 @@ export default function Resume() {
               href={resume.resume_file}
               className="btn btn-secondary self-start md:self-auto"
             >
-              <Download size={15} /> Download PDF
+              <Download size={15} /> {t("resume.downloadPdf")}
             </a>
           )}
         </div>
@@ -238,7 +251,7 @@ export default function Resume() {
         <div className="mx-auto max-w-content space-y-6 px-5 pb-20 sm:px-6 md:px-8 lg:px-10">
           {resume?.summary && (
             <section className="card p-6 md:p-8">
-              <SectionHeading>Summary</SectionHeading>
+              <SectionHeading>{t("resume.summary")}</SectionHeading>
               <p className="mt-4 max-w-3xl leading-relaxed text-slate">
                 {resume.summary}
               </p>
@@ -247,25 +260,33 @@ export default function Resume() {
 
           {experiences.length > 0 && (
             <section className="card p-6 md:p-8">
-              <SectionHeading>Experience</SectionHeading>
+              <SectionHeading>{t("resume.experience")}</SectionHeading>
               <div className="mt-6">
-                <Timeline entries={experienceEntries} />
+                <Timeline
+                  entries={experienceEntries}
+                  current={t("common.current")}
+                  diploma={t("resume.diploma")}
+                />
               </div>
             </section>
           )}
 
           {educations.length > 0 && (
             <section className="card p-6 md:p-8">
-              <SectionHeading>Education</SectionHeading>
+              <SectionHeading>{t("resume.education")}</SectionHeading>
               <div className="mt-6">
-                <Timeline entries={educationEntries} />
+                <Timeline
+                  entries={educationEntries}
+                  current={t("common.current")}
+                  diploma={t("resume.diploma")}
+                />
               </div>
             </section>
           )}
 
           {skillGroups.length > 0 && (
             <section className="card p-6 md:p-8">
-              <SectionHeading>Skills</SectionHeading>
+              <SectionHeading>{t("resume.skills")}</SectionHeading>
               <div className="mt-6 grid gap-6 sm:grid-cols-2">
                 {skillGroups.map((group) => (
                   <div key={group.name}>
@@ -287,7 +308,7 @@ export default function Resume() {
 
           {certificates.length > 0 && (
             <section className="pt-4">
-              <SectionHeading>Certificates</SectionHeading>
+              <SectionHeading>{t("resume.certificates")}</SectionHeading>
               <div className="mt-6 grid gap-5 md:grid-cols-2">
                 {certificates.map((cert) => (
                   <article
@@ -342,7 +363,7 @@ export default function Resume() {
                           rel="noreferrer"
                           className="inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
                         >
-                          View credential <ExternalLink size={13} />
+                          {t("resume.viewCredential")} <ExternalLink size={13} />
                         </a>
                       )}
                       {cert.file && (
@@ -353,7 +374,7 @@ export default function Resume() {
                           rel="noreferrer"
                           className="inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
                         >
-                          <Download size={14} /> Download
+                          <Download size={14} /> {t("common.download")}
                         </a>
                       )}
                     </div>

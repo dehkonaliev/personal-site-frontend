@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import Skeleton from "../components/Skeleton";
@@ -7,13 +8,15 @@ import { api, formatDate, type Post } from "../lib/api";
 import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function Blog() {
+  const { t, i18n } = useTranslation();
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useDocumentTitle("Blog");
+  useDocumentTitle(t("blog.title"));
 
   useEffect(() => {
+    setLoading(true);
     api
       .posts()
       .then(setPosts)
@@ -22,18 +25,17 @@ export default function Blog() {
         setError(true);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [i18n.resolvedLanguage]);
 
   return (
-    <Layout active="Blog">
+    <Layout active="blog">
       <section className="mx-auto max-w-content px-5 pb-10 pt-16 sm:px-6 md:px-8 md:pt-20 lg:px-10">
-        <p className="eyebrow mb-4">Writing</p>
+        <p className="eyebrow mb-4">{t("blog.eyebrow")}</p>
         <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
-          Blog
+          {t("blog.title")}
         </h1>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate">
-          Notes on backend engineering, the move into machine learning, and
-          whatever else is worth writing down along the way.
+          {t("blog.intro")}
         </p>
       </section>
 
@@ -58,13 +60,13 @@ export default function Blog() {
 
         {!loading && error && (
           <div className="card p-8 text-center text-slate">
-            Could not load posts.
+            {t("blog.error")}
           </div>
         )}
 
         {!loading && !error && posts.length === 0 && (
           <div className="card p-8 text-center text-slate">
-            No posts yet — check back soon.
+            {t("blog.empty")}
           </div>
         )}
 
@@ -91,7 +93,7 @@ export default function Blog() {
                   {post.summary}
                 </p>
                 <span className="mt-auto pt-6 text-sm font-medium text-signal">
-                  Read article
+                  {t("blog.read")}
                 </span>
               </Link>
             ))}

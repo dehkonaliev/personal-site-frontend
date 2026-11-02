@@ -1,5 +1,6 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import { flushSync } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { Moon, Sun } from "lucide-react";
 
 export type TransitionVariant = "circle";
@@ -47,6 +48,7 @@ export default function ThemeToggle({
   theme: controlledTheme,
   onThemeChange,
 }: ThemeToggleProps) {
+  const { t } = useTranslation();
   const [internalTheme, setInternalTheme] = useState<Theme>(storedTheme);
   const isControlled = controlledTheme !== undefined;
   const activeTheme = controlledTheme ?? internalTheme;
@@ -57,6 +59,8 @@ export default function ThemeToggle({
   }, [activeTheme, isControlled]);
 
   const nextTheme = activeTheme === "dark" ? "light" : "dark";
+  const nextThemeLabel = t(`theme.${nextTheme}`);
+  const toggleLabel = t("theme.switchTo", { theme: nextThemeLabel });
 
   const updateTheme = (theme: Theme) => {
     if (isControlled) onThemeChange?.(theme);
@@ -113,8 +117,8 @@ export default function ThemeToggle({
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={`Switch to ${nextTheme} mode`}
-      title={`Switch to ${nextTheme} mode`}
+      aria-label={toggleLabel}
+      title={toggleLabel}
       className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-slate shadow-sm transition-colors hover:border-signal/50 hover:text-ink ${className}`.trim()}
     >
       {activeTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}

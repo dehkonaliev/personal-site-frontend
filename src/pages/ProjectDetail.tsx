@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import Breadcrumb from "../components/Breadcrumb";
@@ -11,11 +12,12 @@ import { useDocumentTitle } from "../lib/useDocumentTitle";
 const projectYear = (iso: string) => new Date(iso).getFullYear();
 
 export default function ProjectDetailPage() {
+  const { t, i18n } = useTranslation();
   const { slug = "" } = useParams();
   const [project, setProject] = useState<ProjectDetail | null>(null);
   const [error, setError] = useState(false);
 
-  useDocumentTitle(project?.title ?? "Projects");
+  useDocumentTitle(project?.title ?? t("projects.title"));
 
   useEffect(() => {
     let active = true;
@@ -37,24 +39,24 @@ export default function ProjectDetailPage() {
     return () => {
       active = false;
     };
-  }, [slug]);
+  }, [slug, i18n.resolvedLanguage]);
 
   return (
-    <Layout active="Projects">
+    <Layout active="projects">
       <section className="mx-auto max-w-content px-5 pb-20 pt-12 sm:px-6 md:px-8 lg:px-10">
         <Breadcrumb
           items={[
-            { label: "Home", to: "/" },
-            { label: "Projects", to: "/projects" },
+            { label: t("nav.home"), to: "/" },
+            { label: t("nav.projects"), to: "/projects" },
             ...(project ? [{ label: project.title }] : []),
           ]}
         />
 
         {error && (
           <div className="mt-12 max-w-3xl border-t border-line pt-8">
-            <p className="text-slate">Project not found.</p>
+            <p className="text-slate">{t("projects.notFound")}</p>
             <Link to="/projects" className="btn btn-secondary mt-5">
-              <ArrowLeft size={14} /> All projects
+              <ArrowLeft size={14} /> {t("projects.allProjects")}
             </Link>
           </div>
         )}
@@ -74,7 +76,7 @@ export default function ProjectDetailPage() {
           <article className="mt-12 max-w-content">
             <header className="max-w-4xl border-b border-line pb-10 md:pb-12">
               <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-signal">
-                Selected project <span className="px-2 text-line">/</span>{" "}
+                {t("projects.selected")} <span className="px-2 text-line">/</span>{" "}
                 {projectYear(project.created_at)}
               </p>
               <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight md:text-6xl">
@@ -94,7 +96,7 @@ export default function ProjectDetailPage() {
                   />
                 ) : (
                   <p className="text-sm text-slate">
-                    More details about this project are coming soon.
+                    {t("projects.comingSoon")}
                   </p>
                 )}
               </div>
@@ -106,7 +108,7 @@ export default function ProjectDetailPage() {
                 ).length > 0 && (
                   <section>
                     <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate">
-                      Built with
+                      {t("projects.builtWith")}
                     </h2>
                     <div className="flex flex-wrap gap-2">
                       {project.technologies
@@ -133,12 +135,12 @@ export default function ProjectDetailPage() {
                       rel="noreferrer"
                       className="btn btn-primary"
                     >
-                      <FaGithub size={15} /> View code{" "}
+                      <FaGithub size={15} /> {t("projects.viewCode")}{" "}
                       <ArrowUpRight size={15} />
                     </a>
                   )}
                   <Link to="/projects" className="btn btn-secondary">
-                    <ArrowLeft size={14} /> All projects
+                    <ArrowLeft size={14} /> {t("projects.allProjects")}
                   </Link>
                 </section>
               </aside>

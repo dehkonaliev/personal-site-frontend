@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import Breadcrumb from "../components/Breadcrumb";
@@ -8,11 +9,12 @@ import { api, formatDate, type PostDetail } from "../lib/api";
 import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function PostDetailPage() {
+  const { t, i18n } = useTranslation();
   const { slug = "" } = useParams();
   const [post, setPost] = useState<PostDetail | null>(null);
   const [error, setError] = useState(false);
 
-  useDocumentTitle(post?.title ?? "Blog");
+  useDocumentTitle(post?.title ?? t("blog.title"));
 
   useEffect(() => {
     let active = true;
@@ -34,24 +36,24 @@ export default function PostDetailPage() {
     return () => {
       active = false;
     };
-  }, [slug]);
+  }, [slug, i18n.resolvedLanguage]);
 
   return (
-    <Layout active="Blog">
+    <Layout active="blog">
       <section className="mx-auto max-w-content px-5 pb-20 pt-12 sm:px-6 md:px-8 lg:px-10">
         <Breadcrumb
           items={[
-            { label: "Home", to: "/" },
-            { label: "Blog", to: "/blog" },
+            { label: t("nav.home"), to: "/" },
+            { label: t("nav.blog"), to: "/blog" },
             ...(post ? [{ label: post.title }] : []),
           ]}
         />
 
         {error && (
           <div className="card mt-10 p-8 text-center">
-            <p className="text-slate">Post not found.</p>
+            <p className="text-slate">{t("blog.notFound")}</p>
             <Link to="/blog" className="btn btn-secondary mt-5">
-              <ArrowLeft size={14} /> All posts
+              <ArrowLeft size={14} /> {t("blog.allPosts")}
             </Link>
           </div>
         )}
@@ -69,7 +71,7 @@ export default function PostDetailPage() {
 
         {!error && post && (
           <article className="card mt-8 max-w-3xl p-6 md:p-10">
-            <p className="eyebrow mb-4">Article</p>
+            <p className="eyebrow mb-4">{t("blog.article")}</p>
             <p className="text-xs font-medium uppercase tracking-[0.12em] text-slate">
               {formatDate(post.created_at)}
             </p>
@@ -80,7 +82,7 @@ export default function PostDetailPage() {
               to="/blog"
               className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-signal hover:underline"
             >
-              <ArrowLeft size={14} /> All posts
+              <ArrowLeft size={14} /> {t("blog.allPosts")}
             </Link>
             {post.body && (
               <div

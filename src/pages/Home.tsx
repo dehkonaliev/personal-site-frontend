@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Layout from "../components/Layout";
 import Skeleton from "../components/Skeleton";
 import { Link } from "react-router-dom";
@@ -7,21 +8,23 @@ import { api, type HomeData } from "../lib/api";
 import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function Home() {
+  const { t, i18n } = useTranslation();
   const [home, setHome] = useState<HomeData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useDocumentTitle(home?.job_title);
 
   useEffect(() => {
+    setLoading(true);
     api
       .home()
       .then(setHome)
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [i18n.resolvedLanguage]);
 
   return (
-    <Layout active="Home">
+    <Layout active="home">
       <section className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-signal/10 blur-3xl" />
@@ -59,10 +62,10 @@ export default function Home() {
                 )}
                 <div className="mt-9 flex flex-wrap gap-3">
                   <Link to="/projects" className="btn btn-primary">
-                    See my projects <ArrowUpRight size={16} />
+                    {t("home.seeProjects")} <ArrowUpRight size={16} />
                   </Link>
                   <Link to="/resume" className="btn btn-secondary">
-                    Read my resume
+                    {t("home.readResume")}
                   </Link>
                 </div>
               </>
@@ -99,11 +102,10 @@ export default function Home() {
           <section className="mx-auto max-w-content px-5 pb-20 sm:px-6 md:px-8 lg:px-10">
             <div className="mb-8 max-w-xl">
               <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
-                What I focus on
+                {t("home.focusTitle")}
               </h2>
               <p className="mt-2 leading-relaxed text-slate">
-                The work I care about most, from backend systems to the models
-                that sit on top of them.
+                {t("home.focusIntro")}
               </p>
             </div>
             <div className="grid gap-5 md:grid-cols-3">
@@ -143,7 +145,7 @@ export default function Home() {
               <div className="mx-auto max-w-2xl text-center">
                 <span className="mx-auto mb-5 block h-1 w-10 rounded-full bg-signal" />
                 <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
-                  Off the board
+                  {t("home.offBoard")}
                 </h2>
                 <p className="mt-4 leading-relaxed text-slate">
                   {home.off_board}

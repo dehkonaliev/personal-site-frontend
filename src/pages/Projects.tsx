@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import Skeleton from "../components/Skeleton";
@@ -22,13 +23,15 @@ function techNames(techs: Project["technologies"]): string[] {
 }
 
 export default function Projects() {
+  const { t, i18n } = useTranslation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useDocumentTitle("Projects");
+  useDocumentTitle(t("projects.title"));
 
   useEffect(() => {
+    setLoading(true);
     api
       .projects()
       .then(setProjects)
@@ -37,18 +40,17 @@ export default function Projects() {
         setError(true);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [i18n.resolvedLanguage]);
 
   return (
-    <Layout active="Projects">
+    <Layout active="projects">
       <section className="mx-auto max-w-content px-5 pb-10 pt-16 sm:px-6 md:px-8 md:pt-20 lg:px-10">
-        <p className="eyebrow mb-4">Selected work</p>
+        <p className="eyebrow mb-4">{t("projects.eyebrow")}</p>
         <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
-          Projects
+          {t("projects.title")}
         </h1>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate">
-          A working record, not a highlight reel — things I built end to end,
-          including the parts that went wrong first.
+          {t("projects.intro")}
         </p>
       </section>
 
@@ -79,13 +81,13 @@ export default function Projects() {
 
         {!loading && error && (
           <div className="card p-8 text-center text-slate">
-            Could not load projects.
+            {t("projects.error")}
           </div>
         )}
 
         {!loading && !error && projects.length === 0 && (
           <div className="card p-8 text-center text-slate">
-            Nothing published yet — check back soon.
+            {t("projects.empty")}
           </div>
         )}
 
@@ -131,7 +133,7 @@ export default function Projects() {
                       to={`/projects/${project.slug}`}
                       className="btn btn-primary"
                     >
-                      View details <ArrowUpRight size={15} />
+                      {t("projects.viewDetails")} <ArrowUpRight size={15} />
                     </Link>
                     {project.github_link && (
                       <a
@@ -140,7 +142,7 @@ export default function Projects() {
                         rel="noreferrer"
                         className="btn btn-secondary"
                       >
-                        <FaGithub size={15} /> Code
+                        <FaGithub size={15} /> {t("projects.code")}
                       </a>
                     )}
                   </div>

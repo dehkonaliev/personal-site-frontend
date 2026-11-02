@@ -1,3 +1,5 @@
+import { currentLanguage, intlLocale } from "../i18n";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
 interface Paginated<T> {
@@ -8,7 +10,10 @@ interface Paginated<T> {
 }
 
 async function getJson<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${path}`);
+  const separator = path.includes("?") ? "&" : "?";
+  const res = await fetch(
+    `${API_BASE_URL}${path}${separator}lang=${currentLanguage()}`,
+  );
   if (!res.ok) {
     throw new Error(`GET ${path} failed with ${res.status}`);
   }
@@ -133,7 +138,7 @@ export const api = {
 export function formatDate(iso: string): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString("en-GB", {
+  return date.toLocaleDateString(intlLocale(), {
     year: "numeric",
     month: "long",
     timeZone: "UTC",
