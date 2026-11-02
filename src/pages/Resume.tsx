@@ -1,6 +1,8 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { useLoaderData } from "react-router-dom";
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 import SeeMoreText from "../components/SeeMoreText";
 import Skeleton from "../components/Skeleton";
 import { Download, ExternalLink } from "lucide-react";
@@ -13,8 +15,8 @@ import {
   type Resume as ResumeData,
   type SkillGroup,
 } from "../lib/api";
-import { useDocumentTitle } from "../lib/useDocumentTitle";
 import { intlLocale } from "../i18n";
+import type { ResumePageData } from "../lib/pageLoaders";
 
 const shortDate = (iso: string, locale: string) =>
   new Date(iso).toLocaleDateString(locale, {
@@ -119,14 +121,13 @@ function SectionHeading({ children }: { children: ReactNode }) {
 
 export default function Resume() {
   const { t, i18n } = useTranslation();
-  const [resume, setResume] = useState<ResumeData | null>(null);
-  const [educations, setEducations] = useState<Education[]>([]);
-  const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [skillGroups, setSkillGroups] = useState<SkillGroup[]>([]);
-  const [certificates, setCertificates] = useState<Certificate[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useDocumentTitle(t("resume.title"));
+  const initialData = useLoaderData() as ResumePageData;
+  const [resume, setResume] = useState<ResumeData | null>(initialData.resume);
+  const [educations, setEducations] = useState(initialData.educations);
+  const [experiences, setExperiences] = useState(initialData.experiences);
+  const [skillGroups, setSkillGroups] = useState(initialData.skillGroups);
+  const [certificates, setCertificates] = useState(initialData.certificates);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -177,7 +178,13 @@ export default function Resume() {
   }));
 
   return (
-    <Layout active="resume">
+    <>
+      <SeoHead
+        title={t("resume.title")}
+        description={resume?.summary || t("resume.profile")}
+        pathname="/resume"
+      />
+      <Layout active="resume">
       <section className="mx-auto max-w-content px-5 pb-10 pt-16 sm:px-6 md:px-8 md:pt-20 lg:px-10">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
@@ -384,6 +391,7 @@ export default function Resume() {
           )}
         </div>
       )}
-    </Layout>
+      </Layout>
+    </>
   );
 }

@@ -2,6 +2,16 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
+## Static generation
+
+The production build uses `vite-react-ssg` to pre-render public pages, projects,
+and blog posts. Set `VITE_API_BASE_URL` to the absolute API URL in the build
+environment so the generator can load page data. New or updated articles and
+projects are included on the next build/deploy; a hosting-provider deploy hook
+can trigger that rebuild. Vercel's `cleanUrls` setting serves the generated
+HTML at the existing extension-free routes. The development server remains
+client-rendered.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)

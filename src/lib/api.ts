@@ -11,9 +11,22 @@ interface Paginated<T> {
 
 async function getJson<T>(path: string): Promise<T> {
   const separator = path.includes("?") ? "&" : "?";
-  const res = await fetch(
-    `${API_BASE_URL}${path}${separator}lang=${currentLanguage()}`,
-  );
+  const requestPath = `${path}${separator}lang=${currentLanguage()}`;
+  let url = `${API_BASE_URL}${requestPath}`;
+  if (import.meta.env.SSR) {
+    try {
+      url = new URL(
+        requestPath.replace(/^\//, ""),
+        `${API_BASE_URL.replace(/\/+$/, "")}/`,
+      ).toString();
+    } catch (error) {
+      throw new Error(
+        "VITE_API_BASE_URL must be an absolute URL when prerendering pages.",
+        { cause: error },
+      );
+    }
+  }
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`GET ${path} failed with ${res.status}`);
   }

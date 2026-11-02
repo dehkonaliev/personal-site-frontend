@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import Breadcrumb from "../components/Breadcrumb";
+import SeoHead from "../components/SeoHead";
 import Skeleton from "../components/Skeleton";
 import { ArrowLeft } from "lucide-react";
 import { api, formatDate, type PostDetail } from "../lib/api";
-import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function PostDetailPage() {
   const { t, i18n } = useTranslation();
   const { slug = "" } = useParams();
-  const [post, setPost] = useState<PostDetail | null>(null);
+  const initialPost = useLoaderData() as PostDetail;
+  const [post, setPost] = useState<PostDetail | null>(initialPost);
   const [error, setError] = useState(false);
-
-  useDocumentTitle(post?.title ?? t("blog.title"));
 
   useEffect(() => {
     let active = true;
@@ -39,7 +38,14 @@ export default function PostDetailPage() {
   }, [slug, i18n.resolvedLanguage]);
 
   return (
-    <Layout active="blog">
+    <>
+      <SeoHead
+        title={post?.title ?? t("blog.title")}
+        description={post?.summary ?? t("blog.intro")}
+        pathname={`/blog/${encodeURIComponent(post?.slug ?? slug)}`}
+        type="article"
+      />
+      <Layout active="blog">
       <section className="mx-auto max-w-content px-5 pb-20 pt-12 sm:px-6 md:px-8 lg:px-10">
         <Breadcrumb
           items={[
@@ -93,6 +99,7 @@ export default function PostDetailPage() {
           </article>
         )}
       </section>
-    </Layout>
+      </Layout>
+    </>
   );
 }

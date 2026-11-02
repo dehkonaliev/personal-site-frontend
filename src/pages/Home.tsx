@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLoaderData } from "react-router-dom";
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 import Skeleton from "../components/Skeleton";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { api, type HomeData } from "../lib/api";
-import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function Home() {
   const { t, i18n } = useTranslation();
-  const [home, setHome] = useState<HomeData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useDocumentTitle(home?.job_title);
+  const initialHome = useLoaderData() as HomeData;
+  const [home, setHome] = useState<HomeData | null>(initialHome);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -31,7 +31,13 @@ export default function Home() {
   }, [i18n.resolvedLanguage]);
 
   return (
-    <Layout active="home">
+    <>
+      <SeoHead
+        title={home?.job_title || "Python Backend Developer"}
+        description={home?.home_context || t("home.focusIntro")}
+        pathname="/"
+      />
+      <Layout active="home">
       <section className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-signal/10 blur-3xl" />
@@ -162,6 +168,7 @@ export default function Home() {
           </section>
         )
       )}
-    </Layout>
+      </Layout>
+    </>
   );
 }

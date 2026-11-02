@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 import Skeleton from "../components/Skeleton";
 import { ArrowUpRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import { api, type Project } from "../lib/api";
-import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 const projectYear = (iso: string) => new Date(iso).getFullYear();
 
@@ -24,11 +24,10 @@ function techNames(techs: Project["technologies"]): string[] {
 
 export default function Projects() {
   const { t, i18n } = useTranslation();
-  const [projects, setProjects] = useState<Project[]>([]);
+  const initialProjects = useLoaderData() as Project[];
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useDocumentTitle(t("projects.title"));
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -53,7 +52,13 @@ export default function Projects() {
   }, [i18n.resolvedLanguage]);
 
   return (
-    <Layout active="projects">
+    <>
+      <SeoHead
+        title={t("projects.title")}
+        description={t("projects.intro")}
+        pathname="/projects"
+      />
+      <Layout active="projects">
       <section className="mx-auto max-w-content px-5 pb-10 pt-16 sm:px-6 md:px-8 md:pt-20 lg:px-10">
         <p className="eyebrow mb-4">{t("projects.eyebrow")}</p>
         <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
@@ -162,6 +167,7 @@ export default function Projects() {
           </div>
         )}
       </section>
-    </Layout>
+      </Layout>
+    </>
   );
 }

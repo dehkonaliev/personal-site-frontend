@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 import Skeleton from "../components/Skeleton";
 import { ArrowUpRight } from "lucide-react";
 import { api, formatDate, type Post } from "../lib/api";
-import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function Blog() {
   const { t, i18n } = useTranslation();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const initialPosts = useLoaderData() as Post[];
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useDocumentTitle(t("blog.title"));
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -38,7 +37,13 @@ export default function Blog() {
   }, [i18n.resolvedLanguage]);
 
   return (
-    <Layout active="blog">
+    <>
+      <SeoHead
+        title={t("blog.title")}
+        description={t("blog.intro")}
+        pathname="/blog"
+      />
+      <Layout active="blog">
       <section className="mx-auto max-w-content px-5 pb-10 pt-16 sm:px-6 md:px-8 md:pt-20 lg:px-10">
         <p className="eyebrow mb-4">{t("blog.eyebrow")}</p>
         <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
@@ -110,6 +115,7 @@ export default function Blog() {
           </div>
         )}
       </section>
-    </Layout>
+      </Layout>
+    </>
   );
 }
