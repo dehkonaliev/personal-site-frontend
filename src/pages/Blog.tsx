@@ -16,15 +16,25 @@ export default function Blog() {
   useDocumentTitle(t("blog.title"));
 
   useEffect(() => {
-    setLoading(true);
+    let active = true;
     api
       .posts()
-      .then(setPosts)
+      .then((data) => {
+        if (active) {
+          setPosts(data);
+          setError(false);
+        }
+      })
       .catch((err) => {
         console.error(err);
-        setError(true);
+        if (active) setError(true);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [i18n.resolvedLanguage]);
 
   return (

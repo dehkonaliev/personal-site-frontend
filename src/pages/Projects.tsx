@@ -31,15 +31,25 @@ export default function Projects() {
   useDocumentTitle(t("projects.title"));
 
   useEffect(() => {
-    setLoading(true);
+    let active = true;
     api
       .projects()
-      .then(setProjects)
+      .then((data) => {
+        if (active) {
+          setProjects(data);
+          setError(false);
+        }
+      })
       .catch((err) => {
         console.error(err);
-        setError(true);
+        if (active) setError(true);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [i18n.resolvedLanguage]);
 
   return (

@@ -130,7 +130,6 @@ export default function Resume() {
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
     Promise.all([
       api.resume().catch(() => null),
       api.educations().catch(() => [] as Education[]),

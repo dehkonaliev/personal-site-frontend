@@ -15,12 +15,19 @@ export default function Home() {
   useDocumentTitle(home?.job_title);
 
   useEffect(() => {
-    setLoading(true);
+    let active = true;
     api
       .home()
-      .then(setHome)
+      .then((data) => {
+        if (active) setHome(data);
+      })
       .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [i18n.resolvedLanguage]);
 
   return (
