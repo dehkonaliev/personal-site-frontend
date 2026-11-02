@@ -1,11 +1,12 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { AlertCircle, CheckCircle2, Loader2, Save } from "lucide-react";
+import { AlertCircle, CheckCircle2, Languages, Loader2, Save } from "lucide-react";
 import {
   adminApi,
   errorMessage,
   type AdminRow,
 } from "../../lib/adminApi";
 import { FieldInput } from "./FormFields";
+import TranslationEditor from "./TranslationEditor";
 import { buildPayload, valuesFromRow } from "./formUtils";
 import type { FieldDef } from "./types";
 
@@ -117,6 +118,17 @@ const RESUME_FIELDS: FieldDef[] = [
   },
 ];
 
+const HOME_TRANSLATION_FIELDS = [
+  "first_name",
+  "last_name",
+  "job_title",
+  "heading_activity",
+  "home_context",
+  "off_board",
+];
+
+const RESUME_TRANSLATION_FIELDS = ["location", "summary"];
+
 interface SingletonEditorProps {
   kind: "home" | "resume";
 }
@@ -128,6 +140,9 @@ export default function SingletonEditor({ kind }: SingletonEditorProps) {
   const description = isHome
     ? "Hero copy, the off-the-board note, and the portrait."
     : "Contact details, summary, links, and downloadable files.";
+  const translationFields = isHome
+    ? HOME_TRANSLATION_FIELDS
+    : RESUME_TRANSLATION_FIELDS;
 
   const [form, setForm] = useState<AdminRow>({});
   const [previews, setPreviews] = useState<Record<string, string>>({});
@@ -135,6 +150,7 @@ export default function SingletonEditor({ kind }: SingletonEditorProps) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [translationOpen, setTranslationOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -193,19 +209,29 @@ export default function SingletonEditor({ kind }: SingletonEditorProps) {
           <h1 className="font-display text-2xl">{title}</h1>
           <p className="mt-1 max-w-xl text-sm text-slate">{description}</p>
         </div>
-        <button
-          type="submit"
-          form="singleton-form"
-          disabled={saving || loading}
-          className="inline-flex items-center gap-2 bg-ink px-5 py-2 text-sm text-paper hover:bg-signal disabled:opacity-60"
-        >
-          {saving ? (
-            <Loader2 size={14} className="animate-spin" />
-          ) : (
-            <Save size={14} />
-          )}
-          Save changes
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setTranslationOpen(true)}
+            disabled={loading}
+            className="inline-flex items-center gap-2 border border-line px-4 py-2 text-sm text-slate hover:border-signal hover:text-signal disabled:opacity-60"
+          >
+            <Languages size={15} /> Translations (UZ/RU)
+          </button>
+          <button
+            type="submit"
+            form="singleton-form"
+            disabled={saving || loading}
+            className="inline-flex items-center gap-2 bg-ink px-5 py-2 text-sm text-paper hover:bg-signal disabled:opacity-60"
+          >
+            {saving ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Save size={14} />
+            )}
+            Save changes
+          </button>
+        </div>
       </div>
 
       {notice && (
@@ -246,6 +272,22 @@ export default function SingletonEditor({ kind }: SingletonEditorProps) {
             Changes go live immediately after saving.
           </p>
         </form>
+      )}
+
+      {translationOpen && (
+        <TranslationEditor
+          resource={kind}
+          objectId={0}
+          fields={fields.filter((field) =>
+            translationFields.includes(field.name),
+          )}
+          base={form}
+          onClose={() => setTranslationOpen(false)}
+          onSaved={(message) => {
+            setTranslationOpen(false);
+            setNotice(message);
+          }}
+        />
       )}
     </section>
   );

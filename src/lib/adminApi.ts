@@ -17,6 +17,19 @@ export const UNAUTHORIZED_EVENT = "admin:unauthorized";
 
 export type AdminRow = Record<string, unknown>;
 
+export type TranslationLang = "uz" | "ru";
+
+export type TranslationMap = Record<
+  string,
+  Partial<Record<TranslationLang, string>>
+>;
+
+export interface TranslationResponse {
+  resource: string;
+  object_id: number;
+  translations: TranslationMap;
+}
+
 export class AdminApiError extends Error {
   status: number;
 
@@ -154,6 +167,21 @@ export const adminApi = {
       { method: "POST", body },
     );
   },
+
+  getTranslations: (resource: string, id: number) =>
+    request<TranslationResponse>(
+      `${ADMIN_BASE}/translations/${resource}/${id}`,
+    ),
+
+  saveTranslations: (
+    resource: string,
+    id: number,
+    translations: TranslationMap,
+  ) =>
+    request<TranslationResponse>(
+      `${ADMIN_BASE}/translations/${resource}/${id}`,
+      json("PUT", { translations }),
+    ),
 };
 
 export function errorMessage(error: unknown): string {

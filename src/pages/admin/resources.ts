@@ -30,6 +30,7 @@ export const RESOURCES: ResourceDef[] = [
       { name: "order", label: "Order", type: "number", min: 0 },
     ],
     defaults: { title: "", context: "", order: 0 },
+    translationFields: ["title", "context"],
   },
   {
     key: "experiences",
@@ -67,6 +68,7 @@ export const RESOURCES: ResourceDef[] = [
       order: 0,
       activity: "",
     },
+    translationFields: ["job", "company", "activity", "location"],
   },
   {
     key: "educations",
@@ -112,6 +114,7 @@ export const RESOURCES: ResourceDef[] = [
       order: 0,
       what_learnt: "",
     },
+    translationFields: ["field", "edu_place", "what_learnt"],
   },
   {
     key: "skill-types",
@@ -129,6 +132,7 @@ export const RESOURCES: ResourceDef[] = [
       { name: "order", label: "Order", type: "number", min: 0 },
     ],
     defaults: { name: "", order: 0 },
+    translationFields: ["name"],
   },
   {
     key: "skills",
@@ -154,6 +158,7 @@ export const RESOURCES: ResourceDef[] = [
       { name: "order", label: "Order", type: "number", min: 0 },
     ],
     defaults: { type_id: "", name: "", order: 0 },
+    translationFields: ["name"],
     relations: ["skillTypes"],
   },
   {
@@ -210,6 +215,7 @@ export const RESOURCES: ResourceDef[] = [
       technologies: [],
       what_learnt: "",
     },
+    translationFields: ["name", "issued_by", "what_learnt"],
     relations: ["technologies"],
     transform: (row) => ({ ...row, technologies: relationIds(row.technologies) }),
   },
@@ -271,6 +277,7 @@ export const RESOURCES: ResourceDef[] = [
       technologies: [],
       is_published: false,
     },
+    translationFields: ["title", "summary", "context"],
     relations: ["technologies"],
     transform: (row) => ({ ...row, technologies: relationIds(row.technologies) }),
   },
@@ -323,6 +330,7 @@ export const RESOURCES: ResourceDef[] = [
       body: "",
       is_published: false,
     },
+    translationFields: ["title", "summary", "body"],
   },
   {
     key: "technologies",
@@ -333,6 +341,7 @@ export const RESOURCES: ResourceDef[] = [
     columns: [{ key: "name", label: "Name" }],
     fields: [{ name: "name", label: "Name", type: "text", required: true }],
     defaults: { name: "" },
+    translationFields: ["name"],
   },
 ];
 

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import {
   AlertCircle,
   CheckCircle2,
+  Languages,
   Loader2,
   Pencil,
   Plus,
@@ -15,6 +16,7 @@ import {
   type AdminRow,
 } from "../../lib/adminApi";
 import { FieldInput } from "./FormFields";
+import TranslationEditor from "./TranslationEditor";
 import { buildPayload, valuesFromRow } from "./formUtils";
 import type {
   ColumnDef,
@@ -29,6 +31,7 @@ export default function ResourcePage({ resource }: { resource: ResourceDef }) {
   const [notice, setNotice] = useState("");
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState<AdminRow | null>(null);
+  const [translating, setTranslating] = useState<AdminRow | null>(null);
   const [skillTypes, setSkillTypes] = useState<SelectOption[]>([]);
   const [technologies, setTechnologies] = useState<SelectOption[]>([]);
 
@@ -226,6 +229,22 @@ export default function ResourcePage({ resource }: { resource: ResourceDef }) {
                   ))}
                   <td className="px-4 py-3 text-right align-top">
                     <div className="inline-flex items-center gap-1">
+                      {resource.translationFields &&
+                        resource.translationFields.length > 0 &&
+                        typeof row.id === "number" && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setTranslating(row);
+                              setNotice("");
+                            }}
+                            aria-label="Translations"
+                            title="Manage translations"
+                            className="border border-line p-1.5 text-slate hover:border-signal hover:text-signal"
+                          >
+                            <Languages size={14} />
+                          </button>
+                        )}
                       <button
                         type="button"
                         onClick={() => openEdit(row)}
@@ -264,6 +283,24 @@ export default function ResourcePage({ resource }: { resource: ResourceDef }) {
           }}
         />
       )}
+
+      {translating &&
+        resource.translationFields &&
+        typeof translating.id === "number" && (
+          <TranslationEditor
+            resource={resource.key}
+            objectId={translating.id}
+            fields={resource.fields.filter((field) =>
+              resource.translationFields?.includes(field.name),
+            )}
+            base={translating}
+            onClose={() => setTranslating(null)}
+            onSaved={(message) => {
+              setTranslating(null);
+              setNotice(message);
+            }}
+          />
+        )}
     </section>
   );
 }

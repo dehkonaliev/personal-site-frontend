@@ -52,6 +52,7 @@ export interface ResourceDef {
   columns: ColumnDef[];
   fields: FieldDef[];
   defaults: AdminRow;
+  translationFields?: string[];
   relations?: Array<"skillTypes" | "technologies">;
   transform?: (row: AdminRow) => AdminRow;
   toPayload?: (payload: AdminRow) => AdminRow;
