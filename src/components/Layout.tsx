@@ -44,7 +44,7 @@ export default function Layout({ children, active = "home" }: LayoutProps) {
               to="/"
               className="font-display text-lg font-semibold tracking-tight"
             >
-              Maksudbek Dehqonaliyev
+              Maqsudbek Dehqonaliyev
             </Link>
 
             <div className="flex items-center gap-2 md:gap-3">
