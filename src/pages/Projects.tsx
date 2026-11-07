@@ -4,7 +4,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import Layout from "../components/Layout";
 import SeoHead from "../components/SeoHead";
 import Skeleton from "../components/Skeleton";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import { api, type Project } from "../lib/api";
 
@@ -115,6 +115,20 @@ export default function Projects() {
                   key={project.slug + i}
                   className="card card-interactive group flex h-full flex-col p-6 md:p-8"
                 >
+                  {project.preview_image && (
+                    <Link
+                      to={`/projects/${project.slug}`}
+                      className="mb-6 block overflow-hidden rounded-xl border border-line bg-surface-muted"
+                    >
+                      <img
+                        src={project.preview_image}
+                        alt={`${project.title} preview`}
+                        loading="lazy"
+                        className="aspect-[16/9] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                    </Link>
+                  )}
+
                   <div className="min-w-0">
                       <h2 className="font-display text-xl font-semibold leading-snug tracking-tight">
                         <Link
@@ -150,6 +164,16 @@ export default function Projects() {
                     >
                       {t("projects.viewDetails")} <ArrowUpRight size={15} />
                     </Link>
+                    {project.live_link && (
+                      <a
+                        href={project.live_link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn btn-secondary"
+                      >
+                        <ExternalLink size={15} /> {t("projects.live")}
+                      </a>
+                    )}
                     {project.github_link && (
                       <a
                         href={project.github_link}

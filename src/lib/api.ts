@@ -115,6 +115,8 @@ export interface Project {
   summary: string;
   technologies: string[] | Technology[];
   github_link: string | null;
+  live_link: string | null;
+  preview_image: string | null;
   created_at: string;
 }
 

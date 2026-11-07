@@ -5,7 +5,7 @@ import Layout from "../components/Layout";
 import Breadcrumb from "../components/Breadcrumb";
 import SeoHead from "../components/SeoHead";
 import Skeleton from "../components/Skeleton";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import { api, type ProjectDetail } from "../lib/api";
 
@@ -92,6 +92,16 @@ export default function ProjectDetailPage() {
               </p>
             </header>
 
+            {project.preview_image && (
+              <div className="mt-8 overflow-hidden rounded-2xl border border-line bg-surface-muted">
+                <img
+                  src={project.preview_image}
+                  alt={`${project.title} preview`}
+                  className="w-full object-cover"
+                />
+              </div>
+            )}
+
             <div className="grid gap-10 py-9 md:grid-cols-[minmax(0,1fr)_15rem] md:gap-16 md:py-12">
               <div>
                 {project.context ? (
@@ -133,12 +143,23 @@ export default function ProjectDetailPage() {
                 )}
 
                 <section className="flex flex-col items-start gap-3">
+                  {project.live_link && (
+                    <a
+                      href={project.live_link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn btn-primary"
+                    >
+                      <ExternalLink size={15} /> {t("projects.viewLive")}{" "}
+                      <ArrowUpRight size={15} />
+                    </a>
+                  )}
                   {project.github_link && (
                     <a
                       href={project.github_link}
                       target="_blank"
                       rel="noreferrer"
-                      className="btn btn-primary"
+                      className={project.live_link ? "btn btn-secondary" : "btn btn-primary"}
                     >
                       <FaGithub size={15} /> {t("projects.viewCode")}{" "}
                       <ArrowUpRight size={15} />
