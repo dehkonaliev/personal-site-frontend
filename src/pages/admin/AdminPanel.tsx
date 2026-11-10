@@ -274,7 +274,10 @@ export default function AdminPanel() {
           </button>
         </header>
 
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-10">
+        <div
+          key={location.pathname}
+          className="page-enter mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-10"
+        >
           <Routes>
             <Route index element={<Overview />} />
             <Route path="home" element={<SingletonEditor kind="home" />} />
@@ -316,7 +319,7 @@ function LoginScreen({ onLogin, disabledReason }: LoginScreenProps) {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-paper px-4 text-ink font-sans antialiased">
-      <div className="w-full max-w-sm border border-line bg-paper p-8">
+      <div className="page-enter w-full max-w-sm border border-line bg-paper p-8">
         <div className="mb-4 inline-flex items-center gap-2 text-signal">
           <LockKeyhole size={18} />
           <span className="text-xs font-medium uppercase tracking-wide">

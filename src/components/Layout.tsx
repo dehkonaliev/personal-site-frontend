@@ -113,7 +113,7 @@ export default function Layout({ children, active = "home" }: LayoutProps) {
           )}
         </header>
 
-        <main className="min-h-[60vh]">{children}</main>
+        <main className="page-enter min-h-[60vh]">{children}</main>
 
         <footer className="mt-24 border-t border-line">
           <div className="mx-auto flex max-w-content flex-col gap-6 px-5 py-10 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8 lg:px-10">
