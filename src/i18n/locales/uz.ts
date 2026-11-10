@@ -19,6 +19,7 @@ const uz: Translation = {
     primaryNav: "Asosiy",
     mobileNav: "Mobil",
     breadcrumb: "Navigatsiya",
+    closePreview: "Ko‘rishni yopish",
   },
   language: {
     label: "Til",
@@ -48,6 +49,7 @@ const uz: Translation = {
     certificates: "Sertifikatlar",
     diploma: "Diplom",
     viewCredential: "Sertifikatni ko‘rish",
+    previewCertificate: "Sertifikatni ko‘rish",
   },
   projects: {
     eyebrow: "Tanlangan ishlar",

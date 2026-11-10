@@ -17,6 +17,7 @@ const en = {
     primaryNav: "Primary",
     mobileNav: "Mobile",
     breadcrumb: "Breadcrumb",
+    closePreview: "Close preview",
   },
   language: {
     label: "Language",
@@ -46,6 +47,7 @@ const en = {
     certificates: "Certificates",
     diploma: "Diploma",
     viewCredential: "View credential",
+    previewCertificate: "Preview certificate",
   },
   projects: {
     eyebrow: "Selected work",

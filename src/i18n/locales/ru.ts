@@ -19,6 +19,7 @@ const ru: Translation = {
     primaryNav: "Основная",
     mobileNav: "Мобильная",
     breadcrumb: "Навигация",
+    closePreview: "Закрыть просмотр",
   },
   language: {
     label: "Язык",
@@ -48,6 +49,7 @@ const ru: Translation = {
     certificates: "Сертификаты",
     diploma: "Диплом",
     viewCredential: "Посмотреть сертификат",
+    previewCertificate: "Просмотреть сертификат",
   },
   projects: {
     eyebrow: "Избранные работы",

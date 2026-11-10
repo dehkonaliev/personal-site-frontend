@@ -5,7 +5,8 @@ import Layout from "../components/Layout";
 import SeoHead from "../components/SeoHead";
 import SeeMoreText from "../components/SeeMoreText";
 import Skeleton from "../components/Skeleton";
-import { Download, ExternalLink } from "lucide-react";
+import ImageLightbox from "../components/ImageLightbox";
+import { Download, ExternalLink, ZoomIn } from "lucide-react";
 import {
   api,
   formatDate,
@@ -127,6 +128,7 @@ export default function Resume() {
   const [experiences, setExperiences] = useState(initialData.experiences);
   const [skillGroups, setSkillGroups] = useState(initialData.skillGroups);
   const [certificates, setCertificates] = useState(initialData.certificates);
+  const [preview, setPreview] = useState<Certificate | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -323,13 +325,23 @@ export default function Resume() {
                   >
                     <div className="flex items-start gap-5">
                       {cert.photo_overview && (
-                        <img
-                          src={cert.photo_overview}
-                          alt={cert.name}
-                          width={96}
-                          height={96}
-                          className="h-24 w-24 shrink-0 rounded-xl border border-line object-cover"
-                        />
+                        <button
+                          type="button"
+                          onClick={() => setPreview(cert)}
+                          aria-label={t("resume.previewCertificate")}
+                          className="group relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-line bg-surface-muted"
+                        >
+                          <img
+                            src={cert.photo_overview}
+                            alt={cert.name}
+                            width={96}
+                            height={96}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                          <span className="pointer-events-none absolute bottom-1.5 right-1.5 inline-flex h-7 w-7 items-center justify-center rounded-md bg-ink text-paper shadow-md ring-1 ring-paper/50 transition-transform duration-200 group-hover:scale-110">
+                            <ZoomIn size={14} />
+                          </span>
+                        </button>
                       )}
                       <div className="min-w-0">
                         <p className="text-xs font-medium uppercase tracking-[0.12em] text-slate">
@@ -390,6 +402,16 @@ export default function Resume() {
             </section>
           )}
         </div>
+      )}
+
+      {preview && preview.photo_overview && (
+        <ImageLightbox
+          src={preview.photo_overview}
+          alt={preview.name}
+          title={preview.name}
+          closeLabel={t("common.closePreview")}
+          onClose={() => setPreview(null)}
+        />
       )}
       </Layout>
     </>
